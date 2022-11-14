@@ -1,0 +1,21 @@
+﻿<nav class="side-nav">
+    <div class="title">Links</div>
+    <ul>
+        <li><a class="nav-link" asp-area="Resource" asp-controller="ResourceType" asp-action="List">Resource types</a></li>
+    </ul>
+
+    @if (@Context.Request.Path != "/Resource")
+    {
+    <hr />
+
+    <ul>
+        <li><a class="nav-link" asp-area="Resource" asp-controller="Home" asp-action="Index">Resource list</a></li>
+    </ul>    
+    }
+
+    <hr />
+
+    <ul>
+        <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">MyThinkBook</a></li>
+    </ul>
+</nav>

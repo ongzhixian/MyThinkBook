@@ -1,0 +1,18 @@
+﻿@using MyThinkBook.Web.Areas.FxTrading.Models;
+@model IList<TradeOrder>
+
+<h2>Pending trades</h2>
+
+@if (!Model.Any())
+{
+    <p>No pending trades.</p>
+    return;
+}
+
+<ul>
+    @foreach (var tradeOrder in Model)
+    {
+        <li>@tradeOrder.Id</li>
+    }
+    
+</ul>

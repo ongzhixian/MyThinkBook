@@ -1,0 +1,22 @@
+﻿@using MyThinkBook.Web.Areas.Research.Models;
+@model HyperlinkViewModel
+@{
+    ViewData["Title"] = "Hyperlink Analytics";
+}
+
+<div class="two columns">
+</div>
+
+<div class="eight columns">
+    <div class="container">
+
+        <h2>Hyperlink Analytics</h2>
+
+        <form method="post">
+            <button type="submit" class="button-primary" name="action" value="ToUrlLinks">To URL Links</button>
+            @ViewData["statusMessage"]
+        </form>
+
+    </div>
+
+</div>

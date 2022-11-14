@@ -1,0 +1,21 @@
+﻿<nav class="side-nav">
+    <div class="title">Links</div>
+    <ul>
+        <li><a class="nav-link" asp-area="FxTrading" asp-controller="TradeInstrument" asp-action="Index">Trade instruments</a></li>
+        <li><a class="nav-link" asp-area="FxTrading" asp-controller="OrderSetting" asp-action="Index">Order settings</a></li>
+        <li><a class="nav-link" asp-area="FxTrading" asp-controller="TradeHistory" asp-action="Index">Trade History</a></li>
+
+        <li><a class="nav-link" asp-area="FxTrading" asp-controller="Document" asp-action="Index">Documents (Dropbox)</a></li>
+
+        @if (@Context.Request.Path != "/FxTrading")
+        {
+        <hr />
+
+        <li><a class="nav-link" asp-area="FxTrading" asp-controller="Home" asp-action="Index">Fx Trading</a></li>
+        }
+
+        <hr />
+
+        <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">MyThinkBook</a></li>
+    </ul>
+</nav>

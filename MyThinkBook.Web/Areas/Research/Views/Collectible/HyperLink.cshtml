@@ -1,0 +1,26 @@
+﻿@using MyThinkBook.Web.Areas.Research.Models;
+@model HyperlinkViewModel
+@{
+    ViewData["Title"] = "Hyperlinks";
+}
+
+<div class="two columns">
+</div>
+
+<div class="eight columns">
+    <div class="container">
+
+        <h2>Hyperlinks dump</h2>
+
+        <p>Place each hyperlink line-by-line in the follow text area.</p>
+
+        <form method="post">
+            <label asp-for="Text"></label> 
+            <textarea class="u-full-width" asp-for="Text" rows="20"></textarea>
+            <button type="submit" class="button-primary">Save</button>
+            @ViewData["statusMessage"]
+        </form>
+
+    </div>
+
+</div>

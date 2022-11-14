@@ -1,0 +1,1 @@
+jb cleanupcode --config="cleanupcode-config.xml" MyThinkBook.sln

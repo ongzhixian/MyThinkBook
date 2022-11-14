@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - MyThinkBook</title>
+    <meta name="description" content="Project" />
+    <meta name="author" content="Ong Zhi Xian" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/css/skeleton/normalize.css" />
+    <link rel="stylesheet" href="/css/skeleton/skeleton.css" />
+    <link rel="stylesheet" href="~/css/fx-trading-site.css" asp-append-version="true" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="twelve columns">
+                <h1 style="text-align:center;">@ViewData["Title"]</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            @RenderBody()
+            <div class="two columns">
+                @await Html.PartialAsync("_SideNavBar")
+            </div>
+        </div>
+
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

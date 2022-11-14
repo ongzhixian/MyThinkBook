@@ -1,0 +1,123 @@
+﻿@using MyThinkBook.Web.Areas.FxTrading.Models;
+@model OrderEntry
+@{
+    ViewData["Title"] = "Place order";
+}
+
+<div class="ten columns">
+    <div class="container">
+
+        <form asp-area="FxTrading" asp-controller="Home" asp-action="PlaceOrder" method="post" onsubmit="return isValidForm();">
+
+            <div class="row">
+                <div class="four columns">
+                    <label asp-for="OrderType"></label>
+                    <select asp-for="OrderType" asp-items="Html.GetEnumSelectList<OrderType>()" class="u-full-width"></select>
+                </div>
+                <div class="four columns">
+                    <label asp-for="Quantity"></label>
+                    <input asp-for="Quantity" class="u-full-width" placeholder="Units" />
+                </div>
+                <div class="four columns">
+                    <label asp-for="InstrumentCode"></label>
+                    <input asp-for="InstrumentCode" class="u-full-width" placeholder="" />
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="four columns">
+                    <fieldset id="LimitPriceFieldSet">
+                        <legend>Limit Price</legend>
+                        <label asp-for="LimitPrice"></label>
+                        <input asp-for="LimitPrice" class="u-full-width" pattern="^\d*.?\d*$" />
+                    </fieldset>
+                </div>
+                <div class="four columns">
+                    <label asp-for="StopLossPrice"></label>
+                    <input asp-for="StopLossPrice" class="u-full-width" />
+                </div>
+                <div class="four columns">
+                    <label asp-for="TakeProfitPrice"></label>
+                    <input asp-for="TakeProfitPrice" class="u-full-width" />
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="six columns">
+                    <label asp-for="TimeInForce"></label>
+                    <select asp-for="TimeInForce" asp-items="Html.GetEnumSelectList<TimeInForce>()" class="u-full-width"></select>
+                </div>
+                <div class="four columns">
+                    <label asp-for="PositionFill"></label>
+                    <select asp-for="PositionFill" asp-items="Html.GetEnumSelectList<PositionFill>()" class=" u-full-width"></select>
+                </div>
+                <div class="four columns">
+                </div>
+            </div>
+
+            <label class="example-send-yourself-copy">
+                <label asp-for="ClearFormOnSubmit" style="display:inline-block;"></label>&nbsp;
+                <input asp-for="ClearFormOnSubmit" class="big-checkbox" />
+            </label>
+            <input class="button-primary" type="submit" value="Place order">
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        const form = {
+            discoverForm: function() {
+                // Discover form elements and add them as properties (suffixed with 'Element')
+                var allFormInputElements = document.querySelectorAll("form input, form select, form textarea, form fieldset");
+                allFormInputElements.forEach((ele, key, parent) => {
+                    let propertyName = `${ele.id}Element`;
+                    let valuePropertyName = `${ele.id}Value`;
+                    if (ele.id && !form.hasOwnProperty(propertyName)) {
+                        form[propertyName] = ele;
+                        form[valuePropertyName] = ele.value;
+                        console.debug(ele.id);
+                    }
+                });
+            },
+            addToggleLimitPriceFieldBehaviour: function() {
+                form.OrderTypeElement.addEventListener("change", function (event) {
+                    if (event.target.options[event.target.selectedIndex].text === 'Market') {
+                        form.LimitPriceFieldSetElement.style.visibility = "hidden";
+                        form.LimitPriceElement.value = "0.00";
+                    } else {
+                        form.LimitPriceFieldSetElement.style.visibility = "visible";
+                    }
+                });
+            }, 
+            addDecimalNumberOnlyBehaviour: function(element) {
+                element.addEventListener("keyup", function (event) {
+                    if (event.isComposing || event.keyCode === 229) {
+                        return;
+                    }
+                    if (/^\d*.\d*$/.test(event.target.value)) {
+                        form[`${element.id}Value`] = event.target.value;
+                    } else {
+                        event.target.value = form[`${element.id}Value`];
+                    }
+                });
+                
+            }
+        };
+        function isValidForm() {
+
+            // return false;
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            form.discoverForm();
+            form.addToggleLimitPriceFieldBehaviour();
+            form.addDecimalNumberOnlyBehaviour(form.LimitPriceElement);
+            form.addDecimalNumberOnlyBehaviour(form.StopLossPriceElement);
+            form.addDecimalNumberOnlyBehaviour(form.TakeProfitPriceElement);
+        });
+    </script>
+}

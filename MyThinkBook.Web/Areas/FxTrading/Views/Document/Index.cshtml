@@ -1,0 +1,34 @@
+﻿@using MyThinkBook.Web.Domain;
+@model UsersGetCurrentAccountResponse
+@{
+    ViewData["Title"] = "Research Documents";
+}
+
+<div class="ten columns">
+    <div class="container">
+        
+        <h2>Research Documents</h2>
+
+        <p>No documents yet.</p>
+
+        <p class="note development">
+            We want to store documents about FX trading here. 
+        </p>
+
+        <p>
+            Something akin for equities (if it makes sense 🤔).
+        </p>
+
+        <p>
+            Documents are stored in Dropbox (retrieved via Dropbox Api).
+            <br />
+            See more of what can be done with the API (example given is blog) here:
+            <a href="https://www.dropbox.com/developers/reference">https://www.dropbox.com/developers/reference</a>
+        </p>
+        
+        <p>
+            Documents from @Model.Email
+        </p>
+    </div>
+
+</div>

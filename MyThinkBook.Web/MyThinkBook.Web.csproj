@@ -1,0 +1,116 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>7cd6e2a9-645f-46a3-a538-e13141aa7445</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Areas\Identity\**" />
+	  <Compile Remove="Areas\Project\**" />
+	  <Content Remove="Areas\Identity\**" />
+	  <Content Remove="Areas\Project\**" />
+	  <EmbeddedResource Remove="Areas\Identity\**" />
+	  <EmbeddedResource Remove="Areas\Project\**" />
+	  <None Remove="Areas\Identity\**" />
+	  <None Remove="Areas\Project\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Data\BlogDbContext.cs" />
+	  <Compile Remove="Data\ConfigurationKeys.cs" />
+	  <Compile Remove="Data\DataContextConnectionStrings.cs" />
+	  <Compile Remove="Data\MiniToolsDataContext.cs" />
+	  <Compile Remove="Domain\ContosoUniversity.cs" />
+	  <Compile Remove="Domain\Warehouse.cs" />
+	  <Compile Remove="HostedServices\FxTradingListener.cs" />
+	  <Compile Remove="HostedServices\RabbitMqListener.cs" />
+	  <Compile Remove="Infrastructure\DropboxFileProvider.cs" />
+	  <Compile Remove="Infrastructure\IDropboxFileProvider.cs" />
+	  <Compile Remove="Models\Resource.cs" />
+	  <Compile Remove="Models\ResourceType.cs" />
+	  <Compile Remove="Modules\IMessagingModule.cs" />
+	  <Compile Remove="Modules\IRabbitMqFactory.cs" />
+	  <Compile Remove="Services\CertificateService.cs" />
+	  <Compile Remove="Services\GraphQLService.cs" />
+	  <Compile Remove="Services\GreeterService.cs" />
+	  <Compile Remove="Services\IGraphQLService.cs" />
+	  <Compile Remove="Services\ServerAddressService.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Bogus" Version="34.0.2" />
+		<PackageReference Include="Dropbox.Api" Version="6.36.0" />
+		<PackageReference Include="GraphQL.Client" Version="5.1.0" />
+		<PackageReference Include="GraphQL.Client.Serializer.SystemTextJson" Version="5.1.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.50.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.51.0">
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		  <PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<!-- 
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.0" />
+		-->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.1" />
+		<PackageReference Include="NLog" Version="5.1.0" />
+		<PackageReference Include="NLog.Web.AspNetCore" Version="5.2.0" />
+		<PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\MyThinkBook.Data.MongoDb\MyThinkBook.Data.MongoDb.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="protos\helloworld.proto" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Areas\FxTrading\Views\Document\Create.cshtml" />
+	  <None Include="Areas\FxTrading\Views\Document\Index.cshtml" />
+	  <None Include="Areas\FxTrading\Views\Home\Index.cshtml" />
+	  <None Include="Areas\FxTrading\Views\Shared\_ActiveTrades.cshtml" />
+	  <None Include="Areas\FxTrading\Views\Shared\_Layout.cshtml" />
+	  <None Include="Areas\FxTrading\Views\Shared\_PendingTrades.cshtml" />
+	  <None Include="Areas\FxTrading\Views\Shared\_SideNavBar.cshtml" />
+	  <None Include="Areas\FxTrading\Views\_ViewImports.cshtml" />
+	  <None Include="Areas\FxTrading\Views\_ViewStart.cshtml" />
+	  <None Include="Areas\Resource\Views\Home\Index.cshtml" />
+	  <None Include="Areas\Resource\Views\Shared\_ResourceLayout.cshtml" />
+	  <None Include="Areas\Resource\Views\Shared\_Layout.cshtml" />
+	  <None Include="Areas\Resource\Views\Shared\_ProjectList.cshtml" />
+	  <None Include="Areas\Resource\Views\Shared\_SideNavBar.cshtml" />
+	  <None Include="Areas\Resource\Views\_ViewImports.cshtml" />
+	  <None Include="Areas\Resource\Views\_ViewStart.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Areas\AgileTool\Data\" />
+	  <Folder Include="Areas\AgileTool\Models\" />
+	  <Folder Include="Areas\Investment\Data\" />
+	  <Folder Include="Areas\Investment\Models\" />
+	  <Folder Include="Areas\Investment\Views\" />
+	  <Folder Include="Areas\Research\Data\" />
+	  <Folder Include="Areas\Resource\Data\" />
+	  <Folder Include="HostedServices\" />
+	  <Folder Include="Infrastructure\" />
+	  <Folder Include="Modules\" />
+	</ItemGroup>
+
+</Project>

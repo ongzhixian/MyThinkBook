@@ -1,0 +1,42 @@
+﻿@using MyThinkBook.Web.Areas.Resource.Models;
+@model SearchModel
+@{
+    ViewData["Title"] = "Resources";
+}
+
+<div class="twelve columns">
+    <form asp-action="Index" style="text-align:center;">
+        <div class="form-group">
+            <input asp-for="SearchTerm" class="form-control" />
+            <input class="btn btn-primary" type="submit" value="Search" />
+        </div>
+    </form>
+</div>
+
+<div class="twelve columns">
+
+    <div style="column-count: 3">
+
+        <h2 style="column-span:all">Cloud resources</h2>
+
+        @foreach (var item in Model.CloudResources)
+        {
+            <div class="resource-item">
+                <a asp-area="Resource" asp-controller="Resource" asp-action="Index" asp-route-id="@item.Name">@item.Name</a>
+            </div>
+        }
+
+    </div>
+
+    <hr />
+
+    <div style="column-count: 3">
+        <h2 style="column-span:all">Local resources</h2>
+
+        @foreach (var item in Model.LocalResources)
+        {
+            <div style="text-align:center">@item.Name</div>
+        }
+    </div>
+
+</div>

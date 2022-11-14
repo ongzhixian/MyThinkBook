@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InspectCodeOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Debug>false</Debug>
+  <Verbosity>INFO</Verbosity>
+  <DisabledSettingsLayers />
+  <SuppressBuildInSettings>false</SuppressBuildInSettings>
+  <Properties />
+  <TargetsForReferences />
+  <TargetsForItems />
+  <ExcludedFiles>
+    <ExcludedFiles>**/*.css</ExcludedFiles>
+    <ExcludedFiles>**/*.cshtml</ExcludedFiles>
+  </ExcludedFiles>
+  <Extensions />
+  <ExtensionSources />
+  <CustomSettingsProfiles />
+  <!-- 
+  <OutputFile>inspect-results.xml</OutputFile>
+  <OutputFileFormat>Xml</OutputFileFormat> 
+  -->
+  <OutputFile>InspectCodeResults/inspect-results.html</OutputFile>
+  <OutputFileFormat>Html</OutputFileFormat> 
+  <ParallelJobs>0</ParallelJobs>
+  <UseAbsolutePaths>false</UseAbsolutePaths>
+  <NoSolutionWideAnalysis>false</NoSolutionWideAnalysis>
+  <SolutionWideAnalysis>false</SolutionWideAnalysis>
+  <IncludedProjects>
+    <!-- 
+    <IncludedProjects>MyThinkBook.Data.MongoDb</IncludedProjects> 
+    <IncludedProjects>MyThinkBook.Web*</IncludedProjects>
+    -->
+    <IncludedProjects>MyThinkBook.Web</IncludedProjects>
+    <IncludedProjects>MyThinkBook.Web.Tests</IncludedProjects>
+  </IncludedProjects>
+  <DumpIssuesTypes>false</DumpIssuesTypes>
+  <MinSeverity>SUGGESTION</MinSeverity>
+  <Measure>None</Measure>
+  <NoBuild xsi:nil="true" />
+  <Build xsi:nil="true" />
+</InspectCodeOptions>

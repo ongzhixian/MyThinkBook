@@ -1,0 +1,51 @@
+﻿@using MyThinkBook.Web.Areas.FxTrading.Models;
+@model IndexViewModel
+@{
+    ViewData["Title"] = "Fx Trading";
+}
+
+<div class="two columns">
+
+    <div class="notification" id="tradingEngineNotification">
+        <div class="title">Trading Engine</div>
+        <div class="value">
+            @if (Model.IsTradingProxyOnline)
+            {
+                <span style="color:green">&check;</span>
+            }
+            else
+            {
+                <span style="color:red">&cross;</span>
+            }
+        </div>
+    </div>
+
+    <div class="notification">
+        <div class="title">Signal Engine</div>
+        <div class="value">
+            <span style="color:red">&cross;</span>
+        </div>
+    </div>
+
+    <div class="notification" id="opportunitiesNotification">
+        <div class="title">Opportunities</div>
+        <div class="value">@Model.OpportunitiesCount</div>
+    </div>
+
+</div>
+
+<div class="eight columns">
+    <div class="container">
+
+        @await Html.PartialAsync("_ActiveTrades", Model.ActiveTrades)
+
+        @await Html.PartialAsync("_PendingTrades", Model.PendingTrades)
+
+        <a class="button" asp-area="FxTrading" asp-controller="Home" asp-action="PlaceOrder">Place order</a>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/fxTrading.js"></script>
+}

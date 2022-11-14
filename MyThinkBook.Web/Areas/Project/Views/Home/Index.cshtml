@@ -1,0 +1,9 @@
+﻿@{
+    ViewData["Title"] = "Projects";
+}
+
+@await Html.PartialAsync("_ProjectList")
+
+<div class="action-panel">
+    <a class="button button-primary" asp-area="Project" asp-controller="Home" asp-action="Add">Add project</a>
+</div>

@@ -1,0 +1,53 @@
+﻿@using MyThinkBook.Web.Areas.FxTrading.Models;
+@using MyThinkBook.Web.Domain.FxTrading;
+@model PaginatedDataModel<TradeInstrument>
+@{
+    ViewData["Title"] = "Trade instruments";
+}
+
+<div class="ten columns">
+    <div class="container">
+
+        @*csv_data.append((instrument_name , instrument_display_name, instrument_type, asset_class, minimum_trade_size))*@
+
+        <div class="row pagination">
+            <div class="one-half column">
+                Record @Model.RecordStart - @Model.RecordEnd of @Model.TotalRecordCount
+            </div>
+            <div class="one-half column" style="text-align:right;">
+                Page @Model.CurrentPage of @Model.TotalPageCount
+            </div>
+        </div>
+
+        <table class="u-full-width">
+            <caption>Trade Instruments</caption>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Asset Class</th>
+                    <th>Min. Trade Size</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Data)
+                {
+                <tr>
+                    <td><span title="@item.Name">@item.DisplayName</span></td>
+                    <td>@item.Type</td>
+                    <td>@item.AssetClass</td>
+                    <td>@item.MinimumTradeSize</td>
+                </tr>    
+                }
+            </tbody>
+        </table>
+
+
+        <a class="button" asp-area="FxTrading" asp-controller="Home" asp-action="PlaceOrder">Place order</a>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/fxTrading.js"></script>
+}
