@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "Investment";
 }
+@functions {
+    public string SortValue(string? current, int columnIndex)
+    {
+        return current[columnIndex - 1] == '0' ? "1" : "0";
+    }
+}
 
 <div class="container">
 
@@ -30,6 +36,7 @@
                             <th>
                                 <a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Name">Name</a>
                                 <span class="material-icons">arrow_drop_up</span>
+                                @SortValue(ViewData["sort"]?.ToString(), 1);
                             </th>
                             <th>
                                 <a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Position">Positions</a>
