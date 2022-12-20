@@ -19,6 +19,9 @@ logger.Debug("init main");
 
 try
 {
+    Console.WriteLine(System.Reflection.Assembly.GetEntryAssembly().FullName);
+    Console.WriteLine(System.Reflection.Assembly.GetEntryAssembly().GetName().Name);
+
     var builder = WebApplication.CreateBuilder(args);
 
     AddConfiguration(builder);
