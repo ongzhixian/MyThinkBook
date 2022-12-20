@@ -24,7 +24,9 @@ public class InvestmentDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
+        //base.OnModelCreating(modelBuilder);
+
+        Console.WriteLine("OnModelCreating");
 
         modelBuilder.Entity<Portfolio>(e =>
         {
@@ -74,7 +76,7 @@ public class InvestmentDbContext : DbContext
         var fakePositionGenerator = new Faker<Position>()
             .RuleFor(m => m.Id, f => positionId++)
             .RuleFor(m => m.Quantity, f => f.Random.Number(100, 999999))
-            .RuleFor(m => m.Price, f => decimal.Parse(f.Commerce.Price()))
+            .RuleFor(m => m.Price, f => decimal.Parse(f.Commerce.Price(1M, 399M)))
             .FinishWith((f, position) =>
             {
                 var randomInstrument = f.PickRandom(instruments);

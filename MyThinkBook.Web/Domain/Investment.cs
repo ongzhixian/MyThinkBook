@@ -21,7 +21,7 @@ public record Position
 
     public int InstrumentId { get; set; }
 
-    public Instrument Instrument { get; set; } = new();
+    public virtual Instrument Instrument { get; set; } = default!;
 }
 
 public record Portfolio
@@ -30,5 +30,5 @@ public record Portfolio
 
     public string Name { get; set; } = string.Empty;
 
-    public virtual ICollection<Position> Positions { get; set; } = new List<Position>();
+    public virtual ICollection<Position> Positions { get; set; } = default!;
 }

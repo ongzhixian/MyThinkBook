@@ -23,7 +23,7 @@ public class PortfolioRepository : IPortfolioRepository
 
     public async Task<IEnumerable<Portfolio>> GetPortfoliosAsync(int page = 1, int pageSize = 25)
     {
-        return await dbContext.Portfolios
+        return await dbContext.Portfolios.Include(m => m.Positions)
             .OrderBy(p => p.Name)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)

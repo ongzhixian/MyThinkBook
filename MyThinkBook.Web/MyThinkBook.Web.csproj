@@ -110,6 +110,7 @@
 	  <Folder Include="Areas\Resource\Data\" />
 	  <Folder Include="HostedServices\" />
 	  <Folder Include="Infrastructure\" />
+	  <Folder Include="Migrations\InvestmentDb\" />
 	  <Folder Include="Modules\" />
 	</ItemGroup>
 

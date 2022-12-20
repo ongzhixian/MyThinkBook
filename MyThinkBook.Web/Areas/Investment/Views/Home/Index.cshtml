@@ -25,7 +25,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Positions</th>
-                            <th>Total investment</th>
+                            <th class="text-right""">Total investment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,7 +34,7 @@
                         <tr>
                             <td>@item.Name</td>
                             <td>@item.Positions.Count</td>
-                            <td>@item.Positions.Sum(r=> r.Price * r.Quantity)</td>
+                            <td class="text-right">@item.Positions.Sum(r=> r.Price * r.Quantity).ToString("C")</td>
                             
                         </tr>
                         }
