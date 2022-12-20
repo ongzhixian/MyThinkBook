@@ -62,3 +62,7 @@ textarea {
 .text-right {
     text-align: right;
 }
+
+a.nav.button {
+    width:160px;
+}

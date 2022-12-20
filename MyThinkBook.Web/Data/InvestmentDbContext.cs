@@ -66,6 +66,8 @@ public class InvestmentDbContext : DbContext
             e.HasKey(e => e.Id).HasName("instrument_pk");
         });
 
+        Randomizer.Seed = new Random(2096352011);
+
         int stockId = 1;
         var fakeInstrumentGenerator = new Faker<Instrument>()
             .RuleFor(m => m.Id, f => stockId)
@@ -75,8 +77,8 @@ public class InvestmentDbContext : DbContext
         int positionId = 1;
         var fakePositionGenerator = new Faker<Position>()
             .RuleFor(m => m.Id, f => positionId++)
-            .RuleFor(m => m.Quantity, f => f.Random.Number(100, 999999))
-            .RuleFor(m => m.Price, f => decimal.Parse(f.Commerce.Price(1M, 399M)))
+            .RuleFor(m => m.Quantity, f => f.Random.Number(100, 9999))
+            .RuleFor(m => m.Price, f => decimal.Parse(f.Commerce.Price(1M, 399.99M)))
             .FinishWith((f, position) =>
             {
                 var randomInstrument = f.PickRandom(instruments);
@@ -99,10 +101,10 @@ public class InvestmentDbContext : DbContext
 
         List<Position> positions= new();
         var faker = new Faker();
-        List<Portfolio> portfolios = fakePortfolioGenerator.Generate(10);
+        List<Portfolio> portfolios = fakePortfolioGenerator.Generate(48);
         portfolios.ForEach(portfolio =>
         {
-            var portfolioPositions = fakePositionGenerator.Generate(faker.Random.Number(1, 5)).ToList();
+            var portfolioPositions = fakePositionGenerator.Generate(faker.Random.Number(1, 40)).ToList();
 
             foreach (var position in portfolioPositions)
             {

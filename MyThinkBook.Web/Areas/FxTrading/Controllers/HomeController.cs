@@ -92,7 +92,7 @@ public class HomeController : Controller
 
         int recordEnd = ((page - 1) * pageSize) + records.Count;
 
-        var data = new PaginatedDataModel<TradeInstrument>
+        var data = new XxxPaginatedDataModel<TradeInstrument>
         {
             CurrentPage = page,
             PageSize = pageSize,

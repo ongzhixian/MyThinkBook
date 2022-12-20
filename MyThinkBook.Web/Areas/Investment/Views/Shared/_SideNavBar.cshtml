@@ -1,15 +1,15 @@
 ﻿<nav class="side-nav">
     <div class="title">Links</div>
     <ul>
-        <li><a class="nav-link" asp-area="Research" asp-controller="Book" asp-action="Index">Books</a></li>
-        <li><a class="nav-link" asp-area="Research" asp-controller="Topic" asp-action="Index">Topics</a></li>
-        <li><a class="nav-link" asp-area="Research" asp-controller="Collectible" asp-action="Index">Collectibles</a></li>
+        <li><a class="nav-link" asp-area="Investment" asp-controller="Book" asp-action="Index">Books</a></li>
+        <li><a class="nav-link" asp-area="Investment" asp-controller="Topic" asp-action="Index">Topics</a></li>
+        <li><a class="nav-link" asp-area="Investment" asp-controller="Collectible" asp-action="Index">Collectibles</a></li>
 
-        @if (@Context.Request.Path != "/Research")
+        @if (@Context.Request.Path != "/Investment")
         {
         <hr />
 
-        <li><a class="nav-link" asp-area="Research" asp-controller="Home" asp-action="Index">Research</a></li>
+        <li><a class="nav-link" asp-area="Investment" asp-controller="Home" asp-action="Index">Investment</a></li>
         }
 
         <hr />

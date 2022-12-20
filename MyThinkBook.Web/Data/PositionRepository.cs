@@ -6,41 +6,42 @@ using System.Drawing.Printing;
 
 namespace MyThinkBook.Web.Data;
 
-public interface IPortfolioRepository
+public interface IPositionRepository
 {
     Task<int> SaveChangesAsync();
 
-    Task<PaginatedDataModel<Portfolio>> GetPaginatedPortfoliosAsync(byte page = 1, byte pageSize = 20);
+    Task<PaginatedDataModel<Position>> GetPaginatedPositionsAsync(int id, byte page = 1, byte pageSize = 20);
 }
 
-public class PortfolioRepository : IPortfolioRepository
+public class PositionRepository : IPositionRepository
 {
-    private readonly ILogger<PortfolioRepository> logger;
+    private readonly ILogger<PositionRepository> logger;
     private readonly InvestmentDbContext dbContext;
 
-    public PortfolioRepository(ILogger<PortfolioRepository> logger, InvestmentDbContext dbContext)
+    public PositionRepository(ILogger<PositionRepository> logger, InvestmentDbContext dbContext)
     {
         this.logger = logger;
         this.dbContext = dbContext;
     }
 
-    public async Task<PaginatedDataModel<Portfolio>> GetPaginatedPortfoliosAsync(byte page = 1, byte pageSize = 20)
+    public async Task<PaginatedDataModel<Position>> GetPaginatedPositionsAsync(int id, byte page = 1, byte pageSize = 20)
     {
         int recordsToSkip = (page - 1) * pageSize;
 
-        var records = (await dbContext.Portfolios.Include(m => m.Positions)
-            .OrderBy(p => p.Name)
+        var records = (await dbContext.Positions
+            .Where(r => r.PortfolioId == id)
+            .OrderBy(p => p.Instrument.Name)
             .Skip(recordsToSkip)
             .Take(pageSize)
             .ToListAsync()).ToImmutableList();
 
-        int totalRecordCount = dbContext.Portfolios.Count();
+        int totalRecordCount = await dbContext.Positions.Where(r => r.PortfolioId == id).CountAsync();
 
         int recordStart = recordsToSkip + 1;
 
         int recordEnd = recordsToSkip + records.Count;
 
-        return new PaginatedDataModel<Portfolio>
+        return new PaginatedDataModel<Position>
         {
             CurrentPage = page,
             PageSize = pageSize,

@@ -2,7 +2,7 @@
 
 namespace MyThinkBook.Web.Areas.FxTrading.Models;
 
-public record PaginatedDataModel<T> where T : class
+public record XxxPaginatedDataModel<T> where T : class
 {
     public int CurrentPage { get; set; }
 

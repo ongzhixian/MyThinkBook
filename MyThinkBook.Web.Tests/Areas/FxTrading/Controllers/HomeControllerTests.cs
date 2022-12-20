@@ -111,9 +111,9 @@ public class HomeControllerTests
 
         var model = ((ViewResult)result).Model;
         Assert.IsNotNull(model);
-        Assert.IsInstanceOfType(model, typeof(PaginatedDataModel<TradeInstrument>));
+        Assert.IsInstanceOfType(model, typeof(XxxPaginatedDataModel<TradeInstrument>));
 
-        var paginatedDataModel = model as PaginatedDataModel<TradeInstrument> ?? throw new InvalidCastException();
+        var paginatedDataModel = model as XxxPaginatedDataModel<TradeInstrument> ?? throw new InvalidCastException();
         Assert.AreEqual(1, paginatedDataModel.CurrentPage);
         Assert.AreEqual(1, paginatedDataModel.PageSize);
         Assert.AreEqual(1, paginatedDataModel.RecordStart);

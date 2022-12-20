@@ -13,15 +13,19 @@ using NLog;
 using NLog.Web;
 using Microsoft.AspNetCore.HttpLogging;
 
-var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
 logger.Debug("init main");
 
 try
 {
-    Console.WriteLine(System.Reflection.Assembly.GetEntryAssembly().FullName);
-    Console.WriteLine(System.Reflection.Assembly.GetEntryAssembly().GetName().Name);
+    //var entryAssembly = System.Reflection.Assembly.GetEntryAssembly();
+    //var entryAssemblyName = entryAssembly?.GetName();
+    //if (entryAssemblyName?.Name == "ef")
+    //{
+    //}
 
+    // I think the problem with the EF Core error is because we are using WebApplication.CreateBuilder()
     var builder = WebApplication.CreateBuilder(args);
 
     AddConfiguration(builder);
@@ -61,6 +65,9 @@ try
         .UseSqlite(builder.Configuration.GetConnectionString("InvestmentDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'InvestmentDbContextSqlite' not found."))
         .EnableSensitiveDataLogging());
 
+
+
+
     //builder.Services.AddDbContext<IdentityDataContext>(options =>
     //    options.UseSqlite(builder.Configuration.GetConnectionString("MyThinkBookDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'MyThinkBookDbContextSqlite' not found.")));
 
@@ -99,6 +106,7 @@ try
     builder.Services.AddScoped<IHyperlinkRepository, HyperlinkRepository>();
     builder.Services.AddScoped<IUrlLinkRepository, UrlLinkRepository>();
     builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+    builder.Services.AddScoped<IPositionRepository, PositionRepository>();
 
 
     builder.Services.AddHttpLogging(log =>

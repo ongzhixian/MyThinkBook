@@ -105,7 +105,6 @@
 	  <Folder Include="Areas\AgileTool\Models\" />
 	  <Folder Include="Areas\Investment\Data\" />
 	  <Folder Include="Areas\Investment\Models\" />
-	  <Folder Include="Areas\Investment\Views\" />
 	  <Folder Include="Areas\Research\Data\" />
 	  <Folder Include="Areas\Resource\Data\" />
 	  <Folder Include="HostedServices\" />
