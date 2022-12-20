@@ -27,9 +27,18 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Name</th>
-                            <th>Positions</th>
-                            <th class="text-right">Total investment</th>
+                            <th>
+                                <a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Name">Name</a>
+                                <span class="material-icons">arrow_drop_up</span>
+                            </th>
+                            <th>
+                                <a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Position">Positions</a>
+                                <span class="material-icons">arrow_drop_down</span>
+                            </th>
+                            <th class="text-right">
+                                <a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Amount">Total investment</a>
+                                <span class="material-icons">arrow_drop_down</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
