@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using MvcMovie.Data;
 using MyThinkBook.Data.MongoDb;
 using MyThinkBook.Web.Data;
@@ -24,132 +23,63 @@ try
     //if (entryAssemblyName?.Name == "ef")
     //{
     //}
+    //var serviceProvider = new ServiceCollection()
+    //.AddLogging()
+    //.AddSingleton<IFooService, FooService>()
+    //.AddSingleton<IBarService, BarService>()
+    //.BuildServiceProvider();
+    //IConfiguration config = new ConfigurationBuilder()
+    //.AddJsonFile("appsettings.json")
+    //.AddEnvironmentVariables()
+    //.Build();
 
     // I think the problem with the EF Core error is because we are using WebApplication.CreateBuilder()
     var builder = WebApplication.CreateBuilder(args);
 
-    AddConfiguration(builder);
+    ReadApplicationSettings(builder.Configuration);
 
-    builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
+    MapApplicationsSettings(builder.Configuration, builder.Services);
 
-    //builder.Services.Configure<DropboxOptions>(options => {
-    //    var settingsSection = builder.Configuration.GetSection(DropboxOptions.ConfigurationKey);
-    //    var secretsSection = builder.Configuration.GetSection(DropboxOptions.AppConfigurationKey);
-    //    options.AuthorizeUrl = settingsSection.GetValue<string>("AuthorizeUrl");
-    //    options.ApiBaseUrl = settingsSection.GetValue<string>("ApiBaseUrl");
-    //    options.RedirectUrl = settingsSection.GetValue<string>("RedirectUrl");
+    AddDbContexts(builder.Configuration, builder.Services);
 
-    //    options.RedirectUrl = settingsSection.GetValue<string>("RedirectUrl");
-    //    options.RedirectUrl = settingsSection.GetValue<string>("RedirectUrl");
-    //    //options.Url = Configuration.GetSection("WebTarget").GetValue<string>("WebURL", string.Empty);
-    //});
+    AddAuthenticationServices(builder.Services);
 
-    // Same but no validation; If both bindings have same keys, the last one wins.
-    //builder.Services.Configure<DropboxOptions>(builder.Configuration.GetSection(DropboxOptions.ConfigurationKey));
-    //builder.Services.Configure<DropboxOptions>(builder.Configuration.GetSection(DropboxOptions.AppConfigurationKey));
+    AddIdentityServices(builder.Services);
 
-    builder.Services.AddOptions<DropboxOptions>()
-        .Bind(builder.Configuration.GetSection(DropboxOptions.LocalConfigurationKey))
-        .Bind(builder.Configuration.GetSection(DropboxOptions.SettingsConfigurationKey))
-        .ValidateDataAnnotations()
-        .ValidateOnStart();
+    AddLoggingServices(builder.Services);
 
-    builder.Services.AddDbContext<MvcMovieContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("MvcMovieContext") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
+    AddHealthCheckServices(builder.Services);
+    
+    // AddFileProviderServices
+    //builder.Services.AddSingleton<IDropboxFileProvider, DropboxFileProvider>();
 
-    builder.Services.AddDbContext<MyThinkBookDbContext>(options =>
-        options.UseSqlite(builder.Configuration.GetConnectionString("MyThinkBookDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'MyThinkBookDbContextSqlite' not found.")));
+    // AddServerInformationServices
+    //builder.Services.AddSingleton<IServerAddressService, ServerAddressService>();
 
-    builder.Services.AddDbContext<InvestmentDbContext>(options =>
-        options
-        .UseSqlite(builder.Configuration.GetConnectionString("InvestmentDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'InvestmentDbContextSqlite' not found."))
-        .EnableSensitiveDataLogging());
+    // AddMessengingServices
+    //builder.Services.AddSingleton<IRabbitMqFactory, RabbitMqFactory>();
+    //builder.Services.AddSingleton<IMessagingModule, RabbitMqMessagingModule>();
 
-
-
-
-    //builder.Services.AddDbContext<IdentityDataContext>(options =>
-    //    options.UseSqlite(builder.Configuration.GetConnectionString("MyThinkBookDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'MyThinkBookDbContextSqlite' not found.")));
-
-
-    //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-    //builder.Services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
-    //{
-    //    microsoftOptions.ClientId = builder.Configuration["authentication:microsoft:clientId"];
-    //    microsoftOptions.ClientSecret = builder.Configuration["authentication:microsoft:clientSecret"];
-    //});
-
-    builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie(options =>
-        {
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-            options.SlidingExpiration = true;
-            options.AccessDeniedPath = "/Forbidden/";
-        });
-
-    //builder.Services
-    //    .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    //    .AddEntityFrameworkStores<IdentityDataContext>();
-
-
-
-    RegisterSingleton(builder);
-
+    // AddDataContextServices
+    // builder.Services.AddSingleton<IMongoDbSettings>(serviceProvider => serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
+    //builder.Services.AddSingleton<IDataContextConnectionStrings, DataContextConnectionStrings>();
     //builder.Services.Add(new ServiceDescriptor(typeof(IMiniToolsDataContext), typeof(MiniToolsDataContext), ServiceLifetime.Scoped));
     //builder.Services.AddScoped<IMiniToolsDataContext, MiniToolsDataContext>(sp =>
     //{
     //    return new MiniToolsDataContext(builder.Configuration[ConfigurationKeysLoader.CloudMongoDbMiniToolsConnectionString]!);
     //});
-    //builder.Services.AddScoped<IMiniToolsDataContext, MiniToolsDataContext>();
-    builder.Services.AddScoped<IAppStateItemRepository, AppStateItemRepository>();
-    builder.Services.AddScoped<IHyperlinkRepository, HyperlinkRepository>();
-    builder.Services.AddScoped<IUrlLinkRepository, UrlLinkRepository>();
-    builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
-    builder.Services.AddScoped<IPositionRepository, PositionRepository>();
 
+    AddDataRepositories(builder.Services);
+    
+    AddHttpClientServices(builder.Services);
 
-    builder.Services.AddHttpLogging(log =>
-    {
-        log.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
-    });
+    AddHostedServices(builder.Services);
 
-    builder.Services.AddW3CLogging(logging =>
-    {
-        // Log all W3C fields
-        logging.LoggingFields = W3CLoggingFields.All;
-        //logging.AdditionalRequestHeaders.Add("x-forwarded-for");
-        //logging.AdditionalRequestHeaders.Add("x-client-ssl-protocol");
-        //logging.FileSizeLimit = 5 * 1024 * 1024;
-        //logging.RetainedFileCountLimit = 2;
-        //logging.FileName = "MyLogFile";
-        //logging.LogDirectory = @"C:\logs";
-        //logging.FlushInterval = TimeSpan.FromSeconds(2);
-    });
+    //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-
-    builder.Services.AddHttpClient<IFxTradingEngineProxyService, FxTradingEngineProxyService>();
-    //builder.Services.AddHttpClient<IGraphQLService, GraphQLService>();
-    builder.Services.AddHttpClient<IDropboxService, DropboxService>();
-
-    //builder.Services.AddHostedService<RabbitMqListener>();
-    //builder.Services.AddHostedService<FxTradingListener>();
-
-    // Add services to the container.
     builder.Services.AddControllersWithViews();
 
-
-
-
-    builder.Services.Configure<HealthCheckPublisherOptions>(options =>
-    {
-        options.Period = TimeSpan.FromSeconds(3);
-    });
-
     builder.Services.AddMemoryCache();
-
-    var healthCheckBuilder = builder.Services.AddHealthChecks();
-    //healthCheckBuilder.AddCheck<FxTradingEngineProxyHealthCheck>("FxTradingEngineProxyHealthCheck");
 
     builder.Services.AddResponseCompression(options =>
     {
@@ -228,8 +158,6 @@ try
 
     app.UseCookiePolicy(cookiePolicyOptions);
 
-    // FxTrading/Chat => FxTrading/Home/Chat
-
     app.MapControllerRoute(
         name: "HttpStatus",
         pattern: "/http-status/{id?}",
@@ -281,29 +209,140 @@ finally
     NLog.LogManager.Shutdown();
 }
 
-
-
-static void RegisterSingleton(WebApplicationBuilder builder)
+void AddHealthCheckServices(IServiceCollection services)
 {
-    builder.Services.AddSingleton<IHealthCheckPublisher, HealthCheckPublisher>();
+    services.AddSingleton<IHealthCheckPublisher, HealthCheckPublisher>();
 
-    builder.Services.AddSingleton<IMongoDbSettings>(serviceProvider => serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
-    //builder.Services.AddSingleton<IDataContextConnectionStrings, DataContextConnectionStrings>();
+    services.AddHealthChecks();
 
-    //builder.Services.AddSingleton<IDropboxFileProvider, DropboxFileProvider>();
-
-
-    //builder.Services.AddSingleton<IRabbitMqFactory, RabbitMqFactory>();
-    //builder.Services.AddSingleton<IMessagingModule, RabbitMqMessagingModule>();
-
-    //builder.Services.AddSingleton<IServerAddressService, ServerAddressService>();
+    // Add other custom health checks
+    //var healthCheckBuilder = services.AddHealthChecks();
+    //healthCheckBuilder.AddCheck<FxTradingEngineProxyHealthCheck>("FxTradingEngineProxyHealthCheck");
 }
 
-static void AddConfiguration(WebApplicationBuilder builder)
+void AddDataRepositories(IServiceCollection services)
+{
+    //builder.Services.AddScoped<IMiniToolsDataContext, MiniToolsDataContext>();
+    services.AddScoped<IAppStateItemRepository, AppStateItemRepository>();
+    services.AddScoped<IHyperlinkRepository, HyperlinkRepository>();
+    services.AddScoped<IUrlLinkRepository, UrlLinkRepository>();
+    services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+    services.AddScoped<IPositionRepository, PositionRepository>();
+}
+
+void AddHostedServices(IServiceCollection services)
+{
+    //builder.Services.AddHostedService<RabbitMqListener>();
+    //builder.Services.AddHostedService<FxTradingListener>();
+}
+
+void AddHttpClientServices(IServiceCollection services)
+{
+    services.AddHttpClient<IFxTradingEngineProxyService, FxTradingEngineProxyService>();
+    //builder.Services.AddHttpClient<IGraphQLService, GraphQLService>();
+    services.AddHttpClient<IDropboxService, DropboxService>();
+}
+
+void AddLoggingServices(IServiceCollection services)
+{
+    services.AddHttpLogging(log =>
+    {
+        log.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
+    });
+
+    services.AddW3CLogging(logging =>
+    {
+        // Log all W3C fields
+        logging.LoggingFields = W3CLoggingFields.All;
+        //logging.AdditionalRequestHeaders.Add("x-forwarded-for");
+        //logging.AdditionalRequestHeaders.Add("x-client-ssl-protocol");
+        //logging.FileSizeLimit = 5 * 1024 * 1024;
+        //logging.RetainedFileCountLimit = 2;
+        //logging.FileName = "MyLogFile";
+        //logging.LogDirectory = @"C:\logs";
+        //logging.FlushInterval = TimeSpan.FromSeconds(2);
+    });
+
+}
+
+void AddIdentityServices(IServiceCollection services)
+{
+    //builder.Services
+    //    .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    //    .AddEntityFrameworkStores<IdentityDataContext>();
+}
+
+void AddAuthenticationServices(IServiceCollection services)
+{
+    //builder.Services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+    //{
+    //    microsoftOptions.ClientId = builder.Configuration["authentication:microsoft:clientId"];
+    //    microsoftOptions.ClientSecret = builder.Configuration["authentication:microsoft:clientSecret"];
+    //});
+
+    services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(options =>
+        {
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+            options.SlidingExpiration = true;
+            options.AccessDeniedPath = "/Forbidden/";
+        });
+}
+
+void AddDbContexts(ConfigurationManager configuration, IServiceCollection services)
+{
+    services.AddDbContext<MvcMovieContext>(options =>
+        options.UseSqlServer(configuration.GetConnectionString("MvcMovieContext") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
+
+    services.AddDbContext<MyThinkBookDbContext>(options =>
+        options.UseSqlite(configuration.GetConnectionString("MyThinkBookDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'MyThinkBookDbContextSqlite' not found.")));
+
+    services.AddDbContext<InvestmentDbContext>(options =>
+        options
+        .UseSqlite(configuration.GetConnectionString("InvestmentDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'InvestmentDbContextSqlite' not found."))
+        .EnableSensitiveDataLogging());
+
+    //builder.Services.AddDbContext<IdentityDataContext>(options =>
+    //    options.UseSqlite(builder.Configuration.GetConnectionString("MyThinkBookDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'MyThinkBookDbContextSqlite' not found.")));
+}
+
+void MapApplicationsSettings(ConfigurationManager configuration, IServiceCollection services)
+{
+    services.Configure<MongoDbSettings>(configuration.GetSection("MongoDbSettings"));
+
+    //builder.Services.Configure<DropboxOptions>(options => {
+    //    var settingsSection = builder.Configuration.GetSection(DropboxOptions.ConfigurationKey);
+    //    var secretsSection = builder.Configuration.GetSection(DropboxOptions.AppConfigurationKey);
+    //    options.AuthorizeUrl = settingsSection.GetValue<string>("AuthorizeUrl");
+    //    options.ApiBaseUrl = settingsSection.GetValue<string>("ApiBaseUrl");
+    //    options.RedirectUrl = settingsSection.GetValue<string>("RedirectUrl");
+
+    //    options.RedirectUrl = settingsSection.GetValue<string>("RedirectUrl");
+    //    options.RedirectUrl = settingsSection.GetValue<string>("RedirectUrl");
+    //    //options.Url = Configuration.GetSection("WebTarget").GetValue<string>("WebURL", string.Empty);
+    //});
+
+    // Same but no validation; If both bindings have same keys, the last one wins.
+    //builder.Services.Configure<DropboxOptions>(builder.Configuration.GetSection(DropboxOptions.ConfigurationKey));
+    //builder.Services.Configure<DropboxOptions>(builder.Configuration.GetSection(DropboxOptions.AppConfigurationKey));
+
+    services.AddOptions<DropboxOptions>()
+        .Bind(configuration.GetSection(DropboxOptions.LocalConfigurationKey))
+        .Bind(configuration.GetSection(DropboxOptions.SettingsConfigurationKey))
+        .ValidateDataAnnotations()
+        .ValidateOnStart();
+
+    services.Configure<HealthCheckPublisherOptions>(options =>
+    {
+        options.Period = TimeSpan.FromSeconds(3);
+    });
+}
+
+void ReadApplicationSettings(ConfigurationManager configuration)
 {
     var myThinkBookConfigPath = Path.Join(Environment.GetEnvironmentVariable("USERPROFILE") ?? ".", "mythinkbook.config.json");
 
-    builder.Configuration.AddJsonFile(myThinkBookConfigPath, false, true);
+    configuration.AddJsonFile(myThinkBookConfigPath, false, true);
 
-    builder.Configuration.AddUserSecrets(System.Reflection.Assembly.GetExecutingAssembly(), true, true);
+    configuration.AddUserSecrets(System.Reflection.Assembly.GetExecutingAssembly(), true, true);
 }
