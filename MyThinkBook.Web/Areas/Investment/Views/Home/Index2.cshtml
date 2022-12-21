@@ -35,12 +35,16 @@
                         <tr>
                             <th>
                                 <a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Name">Name</a>
+                                <span class="material-icons">arrow_drop_up</span>
+                                @*@SortValue(ViewData["sort"]?.ToString(), 1)*@
                             </th>
                             <th>
                                 <a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Position">Positions</a>
+                                <span class="material-icons">arrow_drop_down</span>
                             </th>
                             <th class="text-right">
                                 <a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Amount">Total investment</a>
+                                <span class="material-icons">arrow_drop_down</span>
                             </th>
                         </tr>
                     </thead>
@@ -76,5 +80,5 @@
 </div>
 
 @section Scripts {
-    @*<script src="~/js/fxTrading.js"></script>*@
+    <script src="~/js/investment.js"></script>
 }

@@ -24,4 +24,12 @@ public class HomeController : Controller
 
         return View(paginatedPortfolio);
     }
+
+    public async Task<IActionResult> Index2Async(byte page = 1, byte pageSize = 10, string sort = "")
+    {
+        ViewData["sort"] = "000";
+        PaginatedDataModel<Portfolio> paginatedPortfolio = await portfolioRepository.GetPaginatedPortfoliosAsync(page, pageSize);
+
+        return View(paginatedPortfolio);
+    }
 }

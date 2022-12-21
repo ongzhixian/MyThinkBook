@@ -163,14 +163,13 @@ try
         pattern: "/http-status/{id?}",
         defaults: new { area = "", controller = "HttpStatus", action = "Index" });
 
-
     app.MapControllerRoute(
-        name: "FxTradingWith",
+        name: "FxTradingControllerAction",
         pattern: "/FxTrading/{controller=Home}/{action=Index}/{id?}",
         defaults: new { area = "FxTrading" });
 
     app.MapControllerRoute(
-        name: "FxTrading",
+        name: "FxTradingActionOnly",
         pattern: "/FxTrading/{action=Index}",
         defaults: new { area = "FxTrading", controller = "Home" });
 
@@ -180,7 +179,7 @@ try
         defaults: new { area = "Resource", controller = "Resource", action = "Index" });
 
     app.MapControllerRoute(
-        name: "MyArea",
+        name: "GenericExistingArea",
         pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
     app.MapControllerRoute(
