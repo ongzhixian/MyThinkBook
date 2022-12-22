@@ -62,8 +62,11 @@ public class InvestmentDbContext : DbContext
             e.Property(o => o.Id).HasColumnName("id");
 
             e.Property(o => o.Name).HasColumnName("name");
+            e.Property(o => o.Isin).HasColumnName("isin");
+            e.Property(o => o.Code).HasColumnName("code");
 
             e.HasKey(e => e.Id).HasName("instrument_pk");
+            e.HasIndex(e => e.Code).IsUnique();
         });
 
         Randomizer.Seed = new Random(2096352011);
@@ -71,7 +74,9 @@ public class InvestmentDbContext : DbContext
         int stockId = 1;
         var fakeInstrumentGenerator = new Faker<Instrument>()
             .RuleFor(m => m.Id, f => stockId)
-            .RuleFor(m => m.Name, f => $"Stock {stockId++}");
+            .RuleFor(m => m.Name, f => $"Stock {stockId++}")
+            .RuleFor(m => m.Isin, f => f.Finance.Random.AlphaNumeric(9))
+            .RuleFor(m => m.Code, f => f.Finance.Random.AlphaNumeric(4));
         var instruments = fakeInstrumentGenerator.Generate(30);
 
         int positionId = 1;

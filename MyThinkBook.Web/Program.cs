@@ -227,6 +227,7 @@ void AddDataRepositories(IServiceCollection services)
     services.AddScoped<IUrlLinkRepository, UrlLinkRepository>();
     services.AddScoped<IPortfolioRepository, PortfolioRepository>();
     services.AddScoped<IPositionRepository, PositionRepository>();
+    services.AddScoped<IInstrumentRepository, InstrumentRepository>();
 }
 
 void AddHostedServices(IServiceCollection services)
@@ -240,6 +241,7 @@ void AddHttpClientServices(IServiceCollection services)
     services.AddHttpClient<IFxTradingEngineProxyService, FxTradingEngineProxyService>();
     //builder.Services.AddHttpClient<IGraphQLService, GraphQLService>();
     services.AddHttpClient<IDropboxService, DropboxService>();
+    services.AddHttpClient<ISgxScrapingService, SgxScrapingService>();
 }
 
 void AddLoggingServices(IServiceCollection services)

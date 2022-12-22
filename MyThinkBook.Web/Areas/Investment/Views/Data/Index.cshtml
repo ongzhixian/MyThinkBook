@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Investment";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="twelve columns">
+            <h1 style="text-align:center;">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="ten columns">
+            <div class="container">
+
+                <h2>Data</h2>
+
+                <form method="post">
+                    <div>
+                        <button type="submit" name="action" value="Get SGX instruments">Get SGX instruments</button>
+                    </div>
+                    <div>
+                        <button type="submit" name="action" value="Get MarketMetadata">Get MarketMetadata</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+        <div class="two columns">
+            @await Html.PartialAsync("_SideNavBar")
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @*<script src="~/js/fxTrading.js"></script>*@
+}

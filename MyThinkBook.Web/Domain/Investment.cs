@@ -5,6 +5,13 @@ public record Instrument
     public int Id { get; set; }
 
     public string Name { get; set; } = string.Empty;
+
+    public string Isin { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Refers to the instrument code at the exchange
+    /// </summary>
+    public string Code { get; set; } = string.Empty;
 }
 
 public record Position

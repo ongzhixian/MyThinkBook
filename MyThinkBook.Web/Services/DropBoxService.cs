@@ -1,13 +1,7 @@
-﻿using Dropbox.Api;
-using Microsoft.DotNet.MSIdentity.Shared;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using MyThinkBook.Web.Data;
 using MyThinkBook.Web.Domain;
 using MyThinkBook.Web.Options;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
 
