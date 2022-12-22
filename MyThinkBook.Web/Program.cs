@@ -88,6 +88,8 @@ try
         options.EnableForHttps = true;
     });
 
+    builder.Services.AddResponseCaching();
+
     builder.Services.AddSignalR();
 
     builder.Services.AddGrpc();
@@ -127,6 +129,8 @@ try
     app.UseStatusCodePagesWithReExecute("/http-status/{0}");
 
     app.UseHttpsRedirection();
+
+    // app.UseCors();
 
     app.UseResponseCaching();
 

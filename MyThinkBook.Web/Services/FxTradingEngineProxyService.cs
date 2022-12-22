@@ -6,7 +6,7 @@ namespace MyThinkBook.Web.Services;
 
 public interface IFxTradingEngineProxyService
 {
-    Task<IList<Instrument>> GetInstrumentsAsync();
+    Task<IList<XxxInstrument>> GetInstrumentsAsync();
     Task<string> PingAsync();
 }
 
@@ -15,7 +15,7 @@ public class FxTradingEngineProxyService : IFxTradingEngineProxyService
     private const string fxTradingEngineProxyServiceUrlConfigKey = "FxTradingEngineProxyService:Url";
     private readonly ILogger<FxTradingEngineProxyService> logger;
     private readonly HttpClient httpClient;
-    private readonly IList<Instrument> emptyInstrumentList = new List<Instrument>().ToImmutableList();
+    private readonly IList<XxxInstrument> emptyInstrumentList = new List<XxxInstrument>().ToImmutableList();
     
 
     public FxTradingEngineProxyService(ILogger<FxTradingEngineProxyService> logger, IConfiguration configuration, HttpClient httpClient)
@@ -57,11 +57,11 @@ public class FxTradingEngineProxyService : IFxTradingEngineProxyService
         return string.Empty;
     }
 
-    public async Task<IList<Instrument>> GetInstrumentsAsync()
+    public async Task<IList<XxxInstrument>> GetInstrumentsAsync()
     {
         try
         {
-            List<Instrument>? instruments = await httpClient.GetFromJsonAsync<List<Instrument>>("api/instrument");
+            List<XxxInstrument>? instruments = await httpClient.GetFromJsonAsync<List<XxxInstrument>>("api/instrument");
 
             return instruments ?? emptyInstrumentList;
         }
@@ -81,6 +81,6 @@ public class FxTradingEngineProxyService : IFxTradingEngineProxyService
             logger.LogWarning(ex, "Exception occur while pinging health");
         }
 
-        return new List<Instrument>();
+        return new List<XxxInstrument>();
     }
 }

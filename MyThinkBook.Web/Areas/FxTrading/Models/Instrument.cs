@@ -1,6 +1,6 @@
 ﻿namespace MyThinkBook.Web.Areas.FxTrading.Models;
 
-public class Instrument
+public class XxxInstrument
 {
     public string Id { get; set; } = string.Empty;
 

@@ -9,7 +9,7 @@ public class FxTradingStateModel
     private FxTradingStateModel()
     {
         InstrumentsExpiryDateTime = DateTime.UtcNow;
-        instruments = new List<Instrument>();
+        instruments = new List<XxxInstrument>();
     }
 
     public static FxTradingStateModel Instance
@@ -30,9 +30,9 @@ public class FxTradingStateModel
 
     public IList<TradeOrder> PendingTrades { get; set; } = new List<TradeOrder>();
 
-    public IList<Instrument> Instruments => instruments;
+    public IList<XxxInstrument> Instruments => instruments;
 
-    private IList<Instrument> instruments;
+    private IList<XxxInstrument> instruments;
 
     public bool InstrumentsExpired
     {
@@ -44,7 +44,7 @@ public class FxTradingStateModel
 
     public DateTime InstrumentsExpiryDateTime { get; private set; }
 
-    public void SetInstruments(IList<Instrument> instruments, DateTime? expiryDateTime = null)
+    public void SetInstruments(IList<XxxInstrument> instruments, DateTime? expiryDateTime = null)
     {
         this.instruments = instruments;
         InstrumentsExpiryDateTime = expiryDateTime ?? DateTime.UtcNow.AddDays(1);

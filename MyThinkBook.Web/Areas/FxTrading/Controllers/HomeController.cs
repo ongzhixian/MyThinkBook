@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using MyThinkBook.Web.Areas.FxTrading.Models;
 using MyThinkBook.Web.Data;
 using MyThinkBook.Web.Domain.FxTrading;
 using MyThinkBook.Web.Domain.OandaApi;
+using MyThinkBook.Web.Models;
 using MyThinkBook.Web.Services;
 using System.Collections.Immutable;
 
@@ -66,11 +68,47 @@ public class HomeController : Controller
         return View(accountsResponse);
     }
 
-    public async Task<IActionResult> AccountAsync(string id)
+    public async Task<IActionResult> AccountAsync()
     {
-        var accountSummary = await oandaRestApiService.GetAccountSummaryAsync(id);
+        var accountSummary = await oandaRestApiService.GetAccountSummaryAsync();
 
         return View(accountSummary);
+    }
+
+    public async Task<IActionResult> InstrumentsAsync(byte page = 1, byte pageSize = 12)
+    {
+        InstrumentsResponse? instrumentsResponse = await oandaRestApiService.GetInstrumentsAsync();
+
+        var instrumentList = instrumentsResponse.InstrumentList.OrderBy(r => r.Name);
+
+        var pagedData = new PaginatedDataModel<Domain.OandaApi.Instrument>(instrumentList, page, pageSize);
+
+        PaginatedInstrumentViewModel viewModel = new PaginatedInstrumentViewModel(pagedData, page);
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> InstrumentsAsync(PaginatedInstrumentViewModel viewModel, byte page = 1, byte pageSize = 12)
+    {
+        if (ModelState.IsValid)
+        {
+            var instrumentsResponse = await oandaRestApiService.GetInstrumentsAsync();
+
+            var instrumentList = instrumentsResponse.InstrumentList
+                .Where(r => r.Name.Contains(viewModel.SearchTerm))
+                .OrderBy(r => r.Name);
+
+            var pagedData = new PaginatedDataModel<Domain.OandaApi.Instrument>(instrumentList, page, pageSize);
+
+            viewModel = new PaginatedInstrumentViewModel(pagedData, page);
+
+            ModelState.Clear();
+
+            return View(viewModel);
+        }
+
+        return View(viewModel);
     }
 
     public IActionResult Chat()
@@ -83,7 +121,6 @@ public class HomeController : Controller
 
         return View(new OrderEntry());
     }
-
 
     [HttpPost]
     [ValidateAntiForgeryToken]

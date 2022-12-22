@@ -1,0 +1,60 @@
+﻿@using MyThinkBook.Web.Areas.FxTrading.Models;
+@using MyThinkBook.Web.Domain.OandaApi;
+@model PaginatedInstrumentViewModel
+@functions {
+    public string GetAssetClassTag(List<Tag> tags)
+    {
+        return tags.Where(r => r.Type == "ASSET_CLASS").FirstOrDefault()?.Name ?? string.Empty;
+    }
+}
+<div class="ten columns">
+    <div class="container">
+
+        <h2>Instruments information</h2>
+
+        <div>
+            <form method="post">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" />
+                <input asp-for="Page" />
+                <button type="submit" class="btn">Search</button>
+            </form>
+        </div>
+
+        <table class="u-full-width">
+            <thead>
+                <tr>
+                    <td colspan="3">
+                        @await Html.PartialAsync("_TablePaginationHeader", Model.PagedData)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Asset class / Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var instrument in Model.PagedData.Data)
+                {
+                    <tr>
+                        <td>@instrument.Name</td>
+                        <td>@instrument.Code</td>
+                        <td>@GetAssetClassTag(instrument.Tags) / @instrument.Type</td>
+                    </tr>
+                }
+            </tbody>
+            @if (Model.PagedData.TotalPageCount > 1)
+            {
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            @await Html.PartialAsync("_TablePaginationFooter", Model.PagedData)
+                        </td>
+                    </tr>
+                </tfoot>
+            }
+        </table>
+
+    </div>
+</div>

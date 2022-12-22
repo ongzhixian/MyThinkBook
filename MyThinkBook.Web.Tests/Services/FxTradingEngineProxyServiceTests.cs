@@ -174,7 +174,7 @@ namespace MyThinkBook.Web.Services.Tests
 
         private HttpClient getMockApiInstrumentHttpClient()
         {
-            List<Instrument> instrumentList = new();
+            List<XxxInstrument> instrumentList = new();
 
             var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
 

@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
+using static Dropbox.Api.Files.ListRevisionsMode;
 
 namespace MyThinkBook.Web.Models;
 
@@ -33,4 +35,29 @@ public record PaginatedDataModel<T> : IPaginationData where T : class
 
     public IEnumerable<T>? Data { get; set; }
 
+    public PaginatedDataModel()
+    {
+    }
+
+    public PaginatedDataModel(IEnumerable<T> dataList, byte page = 1, byte pageSize = 10)
+    {
+        CurrentPage = page;
+
+        PageSize = pageSize;
+
+        int recordsToSkip = (page - 1) * pageSize;
+
+        Data = dataList
+            .Skip(recordsToSkip)
+            .Take(pageSize);
+
+        TotalRecordCount = dataList.Count();
+
+        TotalPageCount = (TotalRecordCount / pageSize) + ((TotalRecordCount % pageSize) > 0 ? 1 : 0);
+
+        RecordStart = recordsToSkip + 1;
+
+        RecordEnd = recordsToSkip + Data.Count();
+
+    }
 }

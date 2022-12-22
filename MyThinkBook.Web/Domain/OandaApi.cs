@@ -77,3 +77,71 @@ public record AccountSummaryResponse
     [JsonPropertyName("lastTransactionID")]
     public string LastTransactionId { get; set; } = string.Empty;
 }
+
+public record Instrument
+{
+    //"name": "NZD_CAD",
+    //"type": "CURRENCY",
+    //"displayName": "NZD/CAD",
+    //"pipLocation": -4,
+    //"displayPrecision": 5,
+    //"tradeUnitsPrecision": 0,
+    //"minimumTradeSize": "1",
+    //"maximumTrailingStopDistance": "1.00000",
+    //"minimumTrailingStopDistance": "0.00050",
+    //"maximumPositionSize": "0",
+    //"maximumOrderUnits": "100000000",
+    //"marginRate": "0.1",
+    //"guaranteedStopLossOrderMode": "ALLOWED",
+    //"minimumGuaranteedStopLossDistance": "0.0010",
+    //"guaranteedStopLossOrderExecutionPremium": "0.0005",
+
+    [JsonPropertyName("name")]
+    public string Code { get; set; } = string.Empty;
+
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = string.Empty;
+
+    [JsonPropertyName("displayName")]
+    public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("pipLocation")]
+    public int PipLocation { get; set; }
+
+    [JsonPropertyName("displayPrecision")]
+    public int DisplayPrecision { get; set; }
+
+    [JsonPropertyName("tradeUnitsPrecision")]
+    public int TradeUnitsPrecision { get; set; }
+
+    [JsonPropertyName("minimumTradeSize")]
+    public string MinimumTradeSize { get; set; } = string.Empty;
+
+    //"tags": [
+    //    {
+    //        "type": "ASSET_CLASS",
+    //        "name": "CURRENCY"
+    //    }
+    //],
+
+    [JsonPropertyName("tags")]
+    public List<Tag> Tags { get; set; } = new List<Tag>();
+}
+
+public record Tag
+{
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = string.Empty;
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+}
+
+public record InstrumentsResponse
+{
+    [JsonPropertyName("instruments")]
+    public IEnumerable<Instrument> InstrumentList { get; set; } = new List<Instrument>();
+
+    [JsonPropertyName("lastTransactionID")]
+    public string LastTransactionId { get; set; } = string.Empty;
+}
