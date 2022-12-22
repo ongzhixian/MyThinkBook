@@ -1,0 +1,30 @@
+﻿@using MyThinkBook.Web.Domain.OandaApi;
+@model AccountsResponse
+@functions
+{
+    public string FormattedMt4AccountId(int? mt4AccountId)
+    {
+        if (mt4AccountId == null)
+        {
+            return string.Empty;
+        }
+
+        return $"-- (MT4: {mt4AccountId})";
+    }
+}
+<div class="ten columns">
+    <div class="container">
+
+        <h2>Account List</h2>
+
+        <ul>
+            @foreach (var account in Model.AccountList)
+            {
+                <li>
+                    <a asp-area="FxTrading" asp-controller="Home" asp-action="Account" asp-route-id="@account.Id">@account.Id</a> @FormattedMt4AccountId(account.Mt4AccountID)
+                </li>
+            }
+        </ul>
+
+    </div>
+</div>

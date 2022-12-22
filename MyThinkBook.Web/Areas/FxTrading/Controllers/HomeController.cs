@@ -2,6 +2,7 @@
 using MyThinkBook.Web.Areas.FxTrading.Models;
 using MyThinkBook.Web.Data;
 using MyThinkBook.Web.Domain.FxTrading;
+using MyThinkBook.Web.Domain.OandaApi;
 using MyThinkBook.Web.Services;
 using System.Collections.Immutable;
 
@@ -13,14 +14,16 @@ public class HomeController : Controller
     public readonly ILogger<HomeController> logger;
     private readonly IFxTradingEngineProxyService fxTradingEngineProxyService;
     //private readonly IGraphQLService graphQLService;
-    
+    private readonly IOandaRestApiService oandaRestApiService;
+
     private readonly MyThinkBookDbContext myThinkBookDbContext;
 
-    public HomeController(ILogger<HomeController> logger, IFxTradingEngineProxyService fxTradingEngineProxyService, MyThinkBookDbContext myThinkBookDbContext)
+    public HomeController(ILogger<HomeController> logger, IFxTradingEngineProxyService fxTradingEngineProxyService, MyThinkBookDbContext myThinkBookDbContext, IOandaRestApiService oandaRestApiService)
     {
         this.logger = logger;
         this.fxTradingEngineProxyService = fxTradingEngineProxyService;
         this.myThinkBookDbContext = myThinkBookDbContext;
+        this.oandaRestApiService = oandaRestApiService;
 
         //this.graphQLService = graphQLService;
 
@@ -54,6 +57,20 @@ public class HomeController : Controller
         {
             throw;
         }
+    }
+
+    public async Task<IActionResult> AccountsAsync()
+    {
+        var accountsResponse = await oandaRestApiService.GetAccountsAsync();
+        
+        return View(accountsResponse);
+    }
+
+    public async Task<IActionResult> AccountAsync(string id)
+    {
+        var accountSummary = await oandaRestApiService.GetAccountSummaryAsync(id);
+
+        return View(accountSummary);
     }
 
     public IActionResult Chat()

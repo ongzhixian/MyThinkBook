@@ -84,15 +84,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="Areas\FxTrading\Views\Document\Create.cshtml" />
-	  <None Include="Areas\FxTrading\Views\Document\Index.cshtml" />
-	  <None Include="Areas\FxTrading\Views\Home\Index.cshtml" />
-	  <None Include="Areas\FxTrading\Views\Shared\_ActiveTrades.cshtml" />
-	  <None Include="Areas\FxTrading\Views\Shared\_Layout.cshtml" />
-	  <None Include="Areas\FxTrading\Views\Shared\_PendingTrades.cshtml" />
-	  <None Include="Areas\FxTrading\Views\Shared\_SideNavBar.cshtml" />
-	  <None Include="Areas\FxTrading\Views\_ViewImports.cshtml" />
-	  <None Include="Areas\FxTrading\Views\_ViewStart.cshtml" />
 	  <None Include="Areas\Resource\Views\Home\Index.cshtml" />
 	  <None Include="Areas\Resource\Views\Shared\_ResourceLayout.cshtml" />
 	  <None Include="Areas\Resource\Views\Shared\_Layout.cshtml" />

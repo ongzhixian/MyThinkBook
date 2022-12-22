@@ -244,6 +244,7 @@ void AddHttpClientServices(IServiceCollection services)
     //builder.Services.AddHttpClient<IGraphQLService, GraphQLService>();
     services.AddHttpClient<IDropboxService, DropboxService>();
     services.AddHttpClient<ISgxScrapingService, SgxScrapingService>();
+    services.AddHttpClient<IOandaRestApiService, OandaRestApiService>();
 }
 
 void AddLoggingServices(IServiceCollection services)
@@ -340,6 +341,12 @@ void MapApplicationsSettings(ConfigurationManager configuration, IServiceCollect
         .Bind(configuration.GetSection(CloudAmqpOptions.SettingsConfigurationKey))
         .ValidateDataAnnotations()
         .ValidateOnStart();
+
+    services.AddOptions<OandaOptions>()
+    .Bind(configuration.GetSection(OandaOptions.LocalConfigurationKey))
+    .Bind(configuration.GetSection(OandaOptions.SettingsConfigurationKey))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
     services.Configure<HealthCheckPublisherOptions>(options =>
     {

@@ -47,3 +47,7 @@ input[type=checkbox].big-checkbox {
     vertical-align: text-bottom;
     margin: 0;
 }
+
+.text-right {
+    text-align: right;
+}
