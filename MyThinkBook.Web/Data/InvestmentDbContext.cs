@@ -43,6 +43,7 @@ public class InvestmentDbContext : DbContext
             e.ToTable("position");
             e.Property(o => o.Id).HasColumnName("id");
 
+            e.Property(o => o.TradeDate).HasColumnName("trade_date");
             e.Property(o => o.Quantity).HasColumnName("quantity");
             e.Property(o => o.Price).HasColumnName("price");
             e.Ignore(o => o.Amount); // e.Property(o => o.Amount).UsePropertyAccessMode(PropertyAccessMode.Property);
@@ -82,6 +83,7 @@ public class InvestmentDbContext : DbContext
         int positionId = 1;
         var fakePositionGenerator = new Faker<Position>()
             .RuleFor(m => m.Id, f => positionId++)
+            .RuleFor(m => m.TradeDate, f => f.Date.Past(4))
             .RuleFor(m => m.Quantity, f => f.Random.Number(100, 9999))
             .RuleFor(m => m.Price, f => decimal.Parse(f.Commerce.Price(1M, 399.99M)))
             .FinishWith((f, position) =>

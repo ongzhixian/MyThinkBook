@@ -34,13 +34,16 @@
                         </tr>
                         <tr>
                             <th>
-                                <a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Name">Name</a>
+                                Name
+                                @*<a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Name">Name</a>*@
                             </th>
                             <th>
-                                <a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Position">Positions</a>
+                                Positions
+                                @*<a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Position">Positions</a>*@
                             </th>
                             <th class="text-right">
-                                <a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Amount">Total investment</a>
+                                Total investment
+                                @*<a asp-area="Investment" asp-controller="Home" asp-action="Index" asp-route-page="@(Model.CurrentPage)" asp-route-sort="Amount">Total investment</a>*@
                             </th>
                         </tr>
                     </thead>
@@ -49,20 +52,23 @@
                         {
                             <tr>
                                 <td>
-                                    <a asp-area="Investment" asp-controller="Portfolio" asp-action="Index" asp-route-page="@(item.Id)">@item.Name</a>
+                                    <a asp-area="Investment" asp-controller="Portfolio" asp-action="Index" asp-route-id="@item.Id">@item.Name</a>
                                 </td>
                                 <td>@item.Positions.Count</td>
                                 <td class="text-right">@item.Positions.Sum(r=> r.Price * r.Quantity).ToString("C")</td>
                             </tr>
                         }
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3">
-                                @await Html.PartialAsync("_TablePaginationFooter", Model)
-                            </td>
-                        </tr>
-                    </tfoot>
+                    @if (Model.TotalPageCount > 1)
+                    {
+                        <tfoot>
+                            <tr>
+                                <td colspan="3">
+                                    @await Html.PartialAsync("_TablePaginationFooter", Model)
+                                </td>
+                            </tr>
+                        </tfoot>
+                    }
                 </table>
 
             </div>

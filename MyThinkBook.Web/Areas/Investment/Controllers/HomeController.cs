@@ -24,10 +24,8 @@ public class HomeController : Controller
         return View(paginatedPortfolio);
     }
 
-    public async Task<IActionResult> Index2Async(byte page = 1, byte pageSize = 10, string sort = "")
-    {
-        PaginatedDataModel<Portfolio> paginatedPortfolio = await portfolioRepository.GetPaginatedPortfoliosAsync(page, pageSize);
-
-        return View(paginatedPortfolio);
-    }
+    //public async Task<IActionResult> IndexAjax(byte page = 1, byte pageSize = 10, string sort = "")
+    //{
+    //    return View();
+    //}
 }

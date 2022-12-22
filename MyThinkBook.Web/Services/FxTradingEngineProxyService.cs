@@ -4,6 +4,12 @@ using System.Net.Sockets;
 
 namespace MyThinkBook.Web.Services;
 
+public interface IFxTradingEngineProxyService
+{
+    Task<IList<Instrument>> GetInstrumentsAsync();
+    Task<string> PingAsync();
+}
+
 public class FxTradingEngineProxyService : IFxTradingEngineProxyService
 {
     private const string fxTradingEngineProxyServiceUrlConfigKey = "FxTradingEngineProxyService:Url";

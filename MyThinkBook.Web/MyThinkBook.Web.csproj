@@ -39,6 +39,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="Areas\Investment\Views\Home\IndexAjax.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Bogus" Version="34.0.2" />
 		<PackageReference Include="Dropbox.Api" Version="6.36.0" />
 		<PackageReference Include="GraphQL.Client" Version="5.1.0" />

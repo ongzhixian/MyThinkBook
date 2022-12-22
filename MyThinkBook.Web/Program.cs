@@ -120,6 +120,8 @@ try
 
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
+
+        app.UseResponseCompression();
     }
 
     app.UseStatusCodePagesWithReExecute("/http-status/{0}");
@@ -127,8 +129,6 @@ try
     app.UseHttpsRedirection();
 
     app.UseResponseCaching();
-
-    app.UseResponseCompression();
 
     app.UseStaticFiles();
 

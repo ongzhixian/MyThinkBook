@@ -28,7 +28,7 @@ public class PositionRepository : IPositionRepository
     {
         int recordsToSkip = (page - 1) * pageSize;
 
-        var records = (await dbContext.Positions
+        var records = (await dbContext.Positions.Include(m => m.Instrument)
             .Where(r => r.PortfolioId == id)
             .OrderBy(p => p.Instrument.Name)
             .Skip(recordsToSkip)

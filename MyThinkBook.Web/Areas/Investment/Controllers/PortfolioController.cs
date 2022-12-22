@@ -17,8 +17,8 @@ public class PortfolioController : Controller
 
     public async Task<IActionResult> IndexAsync(int id, byte page = 1, byte pageSize = 10)
     {
-        await positionRepository.GetPaginatedPositionsAsync(id, page, pageSize);
+        Models.PaginatedDataModel<Domain.Position> viewModel = await positionRepository.GetPaginatedPositionsAsync(id, page, pageSize);
 
-        return View(id);
+        return View(viewModel);
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyThinkBook.Web.Data;
 
@@ -10,9 +11,11 @@ using MyThinkBook.Web.Data;
 namespace MyThinkBook.Web.Migrations.InvestmentDb
 {
     [DbContext(typeof(InvestmentDbContext))]
-    partial class InvestmentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221222080854_20221222-1608")]
+    partial class _202212221608
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");

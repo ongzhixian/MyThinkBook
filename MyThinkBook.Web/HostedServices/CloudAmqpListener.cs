@@ -11,6 +11,8 @@ public class CloudAmqpListener : IHostedService
 
     private readonly IMessageQueueService messageQueueService;
 
+    public bool IsActive{ get; private set; }
+
     public CloudAmqpListener(ILogger<CloudAmqpListener> logger, IMessageQueueService messageQueueService)
     {
         this.logger = logger;
@@ -22,6 +24,8 @@ public class CloudAmqpListener : IHostedService
     {
         messageQueueService.Consume("hello", Consumer_Received, "consumer1");
 
+        IsActive = true;
+
         return Task.CompletedTask;
     }
 
@@ -29,12 +33,14 @@ public class CloudAmqpListener : IHostedService
     {
         messageQueueService.StopConsuming("consumer1");
 
+        IsActive = false;
+
         return Task.CompletedTask;
     }
 
-    private void Consumer_Received(object? sender, BasicDeliverEventArgs ea)
+    private void Consumer_Received(object? sender, BasicDeliverEventArgs eventArgs)
     {
-        var body = ea.Body.ToArray();
+        var body = eventArgs.Body.ToArray();
         
         var message = Encoding.UTF8.GetString(body);
         
@@ -42,7 +48,7 @@ public class CloudAmqpListener : IHostedService
         
         if (result && sender is IBasicConsumer basicConsumer)
         {
-            basicConsumer.Model.BasicAck(ea.DeliveryTag, false);
+            basicConsumer.Model.BasicAck(eventArgs.DeliveryTag, false);
         }
         
         logger.LogWarning(" [x] Received {0}", message);
