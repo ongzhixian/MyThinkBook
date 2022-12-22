@@ -31,6 +31,6 @@ public record PaginatedDataModel<T> : IPaginationData where T : class
 
     public int RecordEnd { get; set; }
 
-    public ImmutableList<T>? Data { get; set; }
+    public IEnumerable<T>? Data { get; set; }
 
 }

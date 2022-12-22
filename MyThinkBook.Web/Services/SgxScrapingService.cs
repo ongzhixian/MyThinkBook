@@ -9,6 +9,8 @@ public interface ISgxScrapingService
     Task GetInstrumentsAsync(DateTime? now = null);
 
     Task GetMarketMetadataAsync(string exchangeInstrumentCode);
+
+    Task GetPricesAsync(string exchangeInstrumentCode);
 }
 
 public class SgxScrapingService : ISgxScrapingService
@@ -90,12 +92,15 @@ public class SgxScrapingService : ISgxScrapingService
         {
             Isin = r.Isin,
             Code = r.Code,
-            Name = r.Name
+            Name = r.Name 
         });
 
+        int count = 1;
         foreach (var batchOfInstruments in instrumentList.Chunk(100))
         {
-            await instrumentRepository.UpsertInstrumentsAsync(batchOfInstruments);
+            //await instrumentRepository.UpsertInstrumentsAsync(batchOfInstruments);
+            await instrumentRepository.BulkInsertIfNotExistsAsync(batchOfInstruments);
+            Console.WriteLine("Processing batch {0}", count++);
         }
     }
 
@@ -109,5 +114,18 @@ public class SgxScrapingService : ISgxScrapingService
 
         var json = await response.Content.ReadFromJsonAsync<MarketMetadataResponse>();
 
+    }
+
+    public async Task GetPricesAsync(string exchangeInstrumentCode)
+    {
+        // https://api.sgx.com/securities/v1.1/charts/historic/stocks/code/D05
+
+        string url = $"https://api.sgx.com/securities/v1.1/charts/historic/stocks/code/{exchangeInstrumentCode}";
+
+        var response = await httpClient.GetAsync(url);
+
+        response.EnsureSuccessStatusCode();
+
+        var json = await response.Content.ReadFromJsonAsync<SecuritiesChartsResponse>();
     }
 }

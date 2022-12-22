@@ -8,8 +8,8 @@ namespace MyThinkBook.Web.Areas.Investment.Controllers;
 [Area("Investment")]
 public class HomeController : Controller
 {
-    ILogger<HomeController> logger;
-    IPortfolioRepository portfolioRepository;
+    private readonly ILogger<HomeController> logger;
+    private readonly IPortfolioRepository portfolioRepository;
 
     public HomeController(ILogger<HomeController> logger, IPortfolioRepository portfolioRepository)
     {
@@ -19,7 +19,6 @@ public class HomeController : Controller
 
     public async Task<IActionResult> IndexAsync(byte page = 1, byte pageSize = 10, string sort="")
     {
-        ViewData["sort"] = "000";
         PaginatedDataModel<Portfolio> paginatedPortfolio = await portfolioRepository.GetPaginatedPortfoliosAsync(page, pageSize);
 
         return View(paginatedPortfolio);
@@ -27,7 +26,6 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index2Async(byte page = 1, byte pageSize = 10, string sort = "")
     {
-        ViewData["sort"] = "000";
         PaginatedDataModel<Portfolio> paginatedPortfolio = await portfolioRepository.GetPaginatedPortfoliosAsync(page, pageSize);
 
         return View(paginatedPortfolio);

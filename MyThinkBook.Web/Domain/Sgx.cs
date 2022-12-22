@@ -52,3 +52,51 @@ public record MarketMetadataResponse
     [JsonPropertyName("data")]
     public List<MarketMetadata> MarketMetadataList { get; set; } = new List<MarketMetadata>();
 }
+
+public record PriceDataPoint
+{
+    //"nc": "D05",
+    //"trading_time": "20110103_000000",
+    //"o": 14.42,
+    //"h": 14.54,
+    //"l": 14.42,
+    //"lt": 14.5,
+    //"vl": 3599,
+    //"pv": 0,
+    //"v": 52163240,
+
+    [JsonPropertyName("nc")]
+    public string Code { get; set; } = string.Empty;
+
+    [JsonPropertyName("trading_time")]
+    public string TradingTime { get; set; } = string.Empty;
+
+    [JsonPropertyName("o")]
+    public decimal Open { get; set; }
+
+    [JsonPropertyName("h")]
+    public decimal High { get; set; }
+
+    [JsonPropertyName("l")]
+    public decimal Low { get; set; }
+
+    [JsonPropertyName("lt")]
+    public decimal Close { get; set; }
+
+    [JsonPropertyName("vl")]
+    public decimal Volume { get; set; }
+
+}
+
+
+public record SecurityPriceChartData
+{
+    [JsonPropertyName("historic")]
+    public List<PriceDataPoint> PriceDataPointList { get; set; } = new List<PriceDataPoint>();
+}
+
+public record SecuritiesChartsResponse
+{
+    [JsonPropertyName("data")]
+    public SecurityPriceChartData SecurityPriceChartData { get; set; } = new SecurityPriceChartData();
+}

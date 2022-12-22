@@ -298,7 +298,7 @@ void AddDbContexts(ConfigurationManager configuration, IServiceCollection servic
     services.AddDbContext<MyThinkBookDbContext>(options =>
         options.UseSqlite(configuration.GetConnectionString("MyThinkBookDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'MyThinkBookDbContextSqlite' not found.")));
 
-    services.AddDbContext<InvestmentDbContext>(options =>
+    services.AddDbContextPool<InvestmentDbContext>(options =>
         options
         .UseSqlite(configuration.GetConnectionString("InvestmentDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'InvestmentDbContextSqlite' not found."))
         .EnableSensitiveDataLogging());

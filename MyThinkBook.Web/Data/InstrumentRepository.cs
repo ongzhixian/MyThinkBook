@@ -1,4 +1,5 @@
-﻿using MyThinkBook.Web.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using MyThinkBook.Web.Domain;
 
 namespace MyThinkBook.Web.Data;
 
@@ -9,6 +10,8 @@ public interface IInstrumentRepository
     Task<int> AddInstrumentsAsync(IEnumerable<Instrument> instruments);
 
     Task<int> UpsertInstrumentsAsync(IEnumerable<Instrument> instruments);
+
+    Task BulkInsertIfNotExistsAsync(IEnumerable<Instrument> instruments);
 }
 
 public class InstrumentRepository : IInstrumentRepository
@@ -65,6 +68,34 @@ public class InstrumentRepository : IInstrumentRepository
         catch (Exception)
         {
             throw;
+        }
+    }
+
+    public async Task BulkInsertIfNotExistsAsync(IEnumerable<Instrument> instruments)
+    {
+        using (var dbConnection = dbContext.Database.GetDbConnection())
+        {
+            var cmd = dbConnection.CreateCommand();
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.CommandText = @"
+INSERT INTO instrument (name, code, isin) 
+SELECT @name, @code, @isin
+WHERE NOT EXISTS(SELECT 1 FROM instrument WHERE code = @code);
+";
+            cmd.Parameters.Add(new Microsoft.Data.Sqlite.SqliteParameter("@name", Microsoft.Data.Sqlite.SqliteType.Text));
+            cmd.Parameters.Add(new Microsoft.Data.Sqlite.SqliteParameter("@code", Microsoft.Data.Sqlite.SqliteType.Text));
+            cmd.Parameters.Add(new Microsoft.Data.Sqlite.SqliteParameter("@isin", Microsoft.Data.Sqlite.SqliteType.Text));
+
+            await dbConnection.OpenAsync();
+            await cmd.PrepareAsync();
+
+            foreach (var instrument in instruments)
+            {
+                cmd.Parameters["@name"].Value = instrument.Name;
+                cmd.Parameters["@code"].Value = instrument.Code;
+                cmd.Parameters["@isin"].Value = instrument.Isin;
+                await cmd.ExecuteNonQueryAsync();
+            }
         }
     }
 }

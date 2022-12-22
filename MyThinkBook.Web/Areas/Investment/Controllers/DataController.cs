@@ -36,6 +36,11 @@ public class DataController : Controller
             await sgxScrapingService.GetMarketMetadataAsync("U11");
         }
 
+        if (action == "Get Prices")
+        {
+            await sgxScrapingService.GetPricesAsync("U11");
+        }
+
         return View();
     }
 
