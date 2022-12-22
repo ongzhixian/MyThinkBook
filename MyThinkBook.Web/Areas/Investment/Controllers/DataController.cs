@@ -10,12 +10,14 @@ public class DataController : Controller
     private readonly ILogger<DataController> logger;
     private readonly IPositionRepository positionRepository;
     private readonly ISgxScrapingService sgxScrapingService;
+    private readonly IMessageQueueService messageQueueService;
 
-    public DataController(ILogger<DataController> logger, IPositionRepository positionRepository, ISgxScrapingService sgxScrapingService)
+    public DataController(ILogger<DataController> logger, IPositionRepository positionRepository, ISgxScrapingService sgxScrapingService, IMessageQueueService messageQueueService)
     {
         this.logger = logger;
         this.positionRepository = positionRepository;
-        this.sgxScrapingService= sgxScrapingService;
+        this.sgxScrapingService = sgxScrapingService;
+        this.messageQueueService = messageQueueService;
     }
 
     public IActionResult Index()
@@ -39,6 +41,18 @@ public class DataController : Controller
         if (action == "Get Prices")
         {
             await sgxScrapingService.GetPricesAsync("U11");
+        }
+
+        if (action == "Send test message")
+        {
+            //messageQueueService.SendMessage("hello world");
+            messageQueueService.Send("just send", "hello", "hello");
+        }
+
+        if (action == "Stop consumer1")
+        {
+            //messageQueueService.SendMessage("hello world");
+            messageQueueService.StopConsuming("consumer1");
         }
 
         return View();

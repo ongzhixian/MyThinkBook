@@ -1,6 +1,4 @@
-﻿using MongoDB.Driver.Core.Bindings;
-using RabbitMQ.Client;
-using System.Threading.Channels;
+﻿using RabbitMQ.Client;
 
 namespace MyThinkBook.Web.Modules;
 
@@ -13,11 +11,11 @@ public class RabbitMqFactory : IRabbitMqFactory
 {
     private const string CLOUD_AMQP_URL_CONFIGURATION_KEY = "cloud_amqp:armadillo:url";
 
-    private readonly ILogger<RabbitMqMessagingModule> logger;
+    private readonly ILogger<CloudAmqpMessagingQueue> logger;
 
     private readonly ConnectionFactory factory;
 
-    public RabbitMqFactory(ILogger<RabbitMqMessagingModule> logger, IConfiguration configuration)
+    public RabbitMqFactory(ILogger<CloudAmqpMessagingQueue> logger, IConfiguration configuration)
     {
         this.logger = logger;
 

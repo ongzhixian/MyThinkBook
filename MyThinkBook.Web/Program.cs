@@ -11,6 +11,7 @@ using MyThinkBook.Web.Services;
 using NLog;
 using NLog.Web;
 using Microsoft.AspNetCore.HttpLogging;
+using MyThinkBook.Web.HostedServices;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
@@ -59,6 +60,7 @@ try
     // AddMessengingServices
     //builder.Services.AddSingleton<IRabbitMqFactory, RabbitMqFactory>();
     //builder.Services.AddSingleton<IMessagingModule, RabbitMqMessagingModule>();
+    builder.Services.AddSingleton<IMessageQueueService, CloudAmqpMessagingQueue>();
 
     // AddDataContextServices
     // builder.Services.AddSingleton<IMongoDbSettings>(serviceProvider => serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
@@ -232,7 +234,7 @@ void AddDataRepositories(IServiceCollection services)
 
 void AddHostedServices(IServiceCollection services)
 {
-    //builder.Services.AddHostedService<RabbitMqListener>();
+    services.AddHostedService<CloudAmqpListener>();
     //builder.Services.AddHostedService<FxTradingListener>();
 }
 
@@ -330,6 +332,12 @@ void MapApplicationsSettings(ConfigurationManager configuration, IServiceCollect
     services.AddOptions<DropboxOptions>()
         .Bind(configuration.GetSection(DropboxOptions.LocalConfigurationKey))
         .Bind(configuration.GetSection(DropboxOptions.SettingsConfigurationKey))
+        .ValidateDataAnnotations()
+        .ValidateOnStart();
+
+    services.AddOptions<CloudAmqpOptions>()
+        .Bind(configuration.GetSection(CloudAmqpOptions.LocalConfigurationKey))
+        .Bind(configuration.GetSection(CloudAmqpOptions.SettingsConfigurationKey))
         .ValidateDataAnnotations()
         .ValidateOnStart();
 

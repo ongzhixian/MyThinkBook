@@ -26,13 +26,11 @@
 	  <Compile Remove="Domain\ContosoUniversity.cs" />
 	  <Compile Remove="Domain\Warehouse.cs" />
 	  <Compile Remove="HostedServices\FxTradingListener.cs" />
-	  <Compile Remove="HostedServices\RabbitMqListener.cs" />
 	  <Compile Remove="Infrastructure\DropboxFileProvider.cs" />
 	  <Compile Remove="Infrastructure\IDropboxFileProvider.cs" />
+	  <Compile Remove="Infrastructure\IRabbitMqFactory.cs" />
 	  <Compile Remove="Models\Resource.cs" />
 	  <Compile Remove="Models\ResourceType.cs" />
-	  <Compile Remove="Modules\IMessagingModule.cs" />
-	  <Compile Remove="Modules\IRabbitMqFactory.cs" />
 	  <Compile Remove="Services\CertificateService.cs" />
 	  <Compile Remove="Services\GraphQLService.cs" />
 	  <Compile Remove="Services\GreeterService.cs" />
@@ -107,10 +105,8 @@
 	  <Folder Include="Areas\Investment\Models\" />
 	  <Folder Include="Areas\Research\Data\" />
 	  <Folder Include="Areas\Resource\Data\" />
-	  <Folder Include="HostedServices\" />
 	  <Folder Include="Infrastructure\" />
 	  <Folder Include="Migrations\InvestmentDb\" />
-	  <Folder Include="Modules\" />
 	</ItemGroup>
 
 </Project>
