@@ -1,15 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MyThinkBook.Web.Domain.OandaApi;
+﻿using MyThinkBook.Web.Domain.OandaApi;
 using MyThinkBook.Web.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyThinkBook.Web.Areas.FxTrading.Models;
-
-public class InstrumentSearchFormViewModel
-{
-    [Display(Name = "Name contains", Description = "Search criteria")]
-    public string SearchTerm { get; set; } = string.Empty;
-}
 
 public class InstrumentPageViewModel
 {
@@ -30,4 +23,10 @@ public class InstrumentPageViewModel
     public InstrumentPageViewModel() : this(new(), new())
     {
     }
+}
+
+public class InstrumentSearchFormViewModel
+{
+    [Display(Name = "Name contains", Description = "Search criteria")]
+    public string SearchTerm { get; set; } = string.Empty;
 }

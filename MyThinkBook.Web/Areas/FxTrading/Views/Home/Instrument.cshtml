@@ -1,4 +1,6 @@
-﻿@{
+﻿@using MyThinkBook.Web.Areas.FxTrading.Models;
+@model InstrumentViewModel
+@{
     ViewData["Title"] = "Instrument - Fx Trading";
 }
 <div class="ten columns">
@@ -6,5 +8,65 @@
 
         <h2>Instrument</h2>
 
+        <div id="ohlcChart"></div>
+
     </div>
 </div>
+
+@section Scripts {
+    @*
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/stock.js"></script>
+    <script src="https://code.highcharts.com/indicators/indicators-all.js"></script>
+
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/accessibility.js"></script>
+    *@
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+
+    <script type="text/javascript">
+        "use strict";
+
+        Highcharts.stockChart('ohlcChart', {
+            rangeSelector: {
+                buttons: [{
+                    type: 'minute',
+                    count: 5,
+                    text: '5m',
+                    title: 'View 5 minutes'
+                }, {
+                    type: 'minute',
+                    count: 15,
+                    text: '15m',
+                    title: 'View 15 minutes'
+                }, {
+                    type: 'minute',
+                    count: 30,
+                    text: '30m',
+                    title: 'View 30 minutes'
+                }, {
+                    type: 'hour',
+                    count: 1,
+                    text: '1h',
+                    title: 'View 1 hour'
+                }, {
+                    type: 'all',
+                    text: 'All',
+                    title: 'View all'
+                }],
+                selected: 3
+            },
+            title: {
+                text: '@Model.InstrumentName'
+            },
+            series: [{
+                type: 'ohlc',
+                name: '@Model.InstrumentCode',
+                data: @Model.OhlcJson
+            }]
+        });
+    </script>
+}

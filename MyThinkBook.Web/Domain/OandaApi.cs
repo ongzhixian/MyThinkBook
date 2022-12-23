@@ -145,3 +145,61 @@ public record InstrumentsResponse
     [JsonPropertyName("lastTransactionID")]
     public string LastTransactionId { get; set; } = string.Empty;
 }
+
+public record Ohlc
+{
+    //"o": "1793.574",
+    //"h": "1793.637",
+    //"l": "1793.530",
+    //"c": "1793.547"
+
+    [JsonPropertyName("o")]
+    public string Open { get; set; } = string.Empty;
+
+    [JsonPropertyName("h")]
+    public string High { get; set; } = string.Empty;
+
+    [JsonPropertyName("l")]
+    public string Low { get; set; } = string.Empty;
+
+    [JsonPropertyName("c")]
+    public string Close { get; set; } = string.Empty;
+
+}
+
+public record Candle
+{
+    //"complete": true,
+    //"volume": 17,
+    //"time": "2022-12-23T00:24:00.000000000Z",
+
+    [JsonPropertyName("complete")]
+    public bool Complete { get; set; }
+
+    [JsonPropertyName("volume")]
+    public int Volume { get; set; }
+
+    [JsonPropertyName("time")]
+    public string Time { get; set; } = string.Empty;
+
+    [JsonPropertyName("bid")]
+    public Ohlc? Bid { get; set; }
+
+    [JsonPropertyName("mid")]
+    public Ohlc? Mid { get; set; }
+
+    [JsonPropertyName("ask")]
+    public Ohlc? Ask { get; set; }
+}
+
+public record InstrumentCandlesResponse
+{
+    [JsonPropertyName("instrument")]
+    public string InstrumentCode { get; set; } = string.Empty;
+
+    [JsonPropertyName("granularity")]
+    public string Granularity { get; set; } = string.Empty;
+
+    [JsonPropertyName("candles")]
+    public IEnumerable<Candle> CandleList { get; set; } = new List<Candle>();
+}

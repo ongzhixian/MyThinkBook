@@ -4,6 +4,7 @@ using MyThinkBook.Web.Areas.FxTrading.Models;
 using MyThinkBook.Web.Data;
 using MyThinkBook.Web.Domain.FxTrading;
 using MyThinkBook.Web.Domain.OandaApi;
+using MyThinkBook.Web.Extensions;
 using MyThinkBook.Web.Models;
 using MyThinkBook.Web.Services;
 using System.Collections.Immutable;
@@ -113,10 +114,42 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Instrument(string id)
+    public async Task<IActionResult> InstrumentAsync(string id)
     {
-        return View();
+        // var candlesResponse = await oandaRestApiService.GetInstrumentCandlesAsync(id);
+
+        await oandaRestApiService.GetInstrumentOrderBookAsync(id);
+
+        await oandaRestApiService.GetInstrumentPositionBookAsync(id);
+
+        var instrumentInfo = (await oandaRestApiService.GetInstrumentsAsync()).InstrumentList.Where(r => r.Code == id).FirstOrDefault();
+
+        InstrumentViewModel vm = new InstrumentViewModel();
+        //vm.OhlcJson = GetTimeOhlcJson(candlesResponse.CandleList);
+        vm.OhlcJson = "[]";
+        vm.InstrumentName = instrumentInfo.Name;
+        vm.InstrumentCode = instrumentInfo.Code;
+
+        return View(vm);
     }
+
+    private string GetTimeOhlcJson(IEnumerable<Candle> candleList)
+    {
+        var hcf = candleList.Select(r => new object[]
+            {
+                r.Time.ToEpochTime(),
+                r.Mid?.Open.ToDecimal(),
+                r.Mid?.High.ToDecimal(),
+                r.Mid?.Low.ToDecimal(),
+                r.Mid?.Close.ToDecimal()
+            });
+
+        var jsonx = System.Text.Json.JsonSerializer.Serialize(hcf);
+
+        return jsonx;
+    }
+
+    // The below are experimental
 
     public IActionResult Chat()
     {

@@ -13,14 +13,20 @@ public interface IOandaRestApiService
     Task<AccountSummaryResponse> GetAccountSummaryAsync();
 
     Task<InstrumentsResponse> GetInstrumentsAsync();
+
+    Task<InstrumentCandlesResponse?> GetInstrumentCandlesAsync(string instrumentCode, string priceComponent = "MBA", string candlestickGranularity = "M1");
+    
+    Task GetInstrumentOrderBookAsync(string instrumentCode);
+
+    Task GetInstrumentPositionBookAsync(string instrumentCode);
 }
 
 
 public class OandaRestApiService : IOandaRestApiService
 {
+    private readonly string accountNumber;
     private readonly ILogger<OandaRestApiService> logger;
     private readonly HttpClient httpClient;
-    private readonly string accountNumber;
     private readonly IMemoryCache memoryCache;
 
     public OandaRestApiService(ILogger<OandaRestApiService> logger, HttpClient httpClient, IOptions<OandaOptions> oandaOptions, IMemoryCache memoryCache)
@@ -63,6 +69,23 @@ public class OandaRestApiService : IOandaRestApiService
         logger.LogInformation("Get instruments from memory cache");
 
         return instrumentsResponse ?? await RetrieveInstrumentsAsync();
+    }
+
+    public async Task<InstrumentCandlesResponse?> GetInstrumentCandlesAsync(string instrumentCode, string priceComponent="MBA", string candlestickGranularity="M1")
+    {
+        var response = await this.httpClient.GetFromJsonAsync<InstrumentCandlesResponse>($"/v3/instruments/{instrumentCode}/candles?price={priceComponent}&granularity={candlestickGranularity}");
+
+        return response;
+    }
+
+    public async Task GetInstrumentOrderBookAsync(string instrumentCode)
+    {
+        var response = await this.httpClient.GetStringAsync($"/v3/instruments/{instrumentCode}/orderBook");
+    }
+
+    public async Task GetInstrumentPositionBookAsync(string instrumentCode)
+    {
+        var response = await this.httpClient.GetStringAsync($"/v3/instruments/{instrumentCode}/positionBook");
     }
 
     private async Task<InstrumentsResponse> RetrieveInstrumentsAsync()
