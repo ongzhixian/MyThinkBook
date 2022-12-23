@@ -1,0 +1,25 @@
+﻿@using MyThinkBook.Web.Domain;
+@model IPageMetaData
+
+<div class="row pagination">
+    <div class="one-half column">
+        @if (Model.CurrentPage != 1)
+        {
+            <button type="submit" class="btn" name="page" value="@(Model.CurrentPage - 1)">Previous @Model.PageSize</button>
+        }
+        else
+        {
+            <text>&nbsp;</text>
+        }
+    </div>
+    <div class="one-half column" style="text-align:right;">
+        @if (Model.CurrentPage != Model.TotalPageCount)
+        {
+            <button type="submit" class="btn" name="page" value="@(Model.CurrentPage + 1)">Next @(Math.Min(Model.TotalRecordCount - Model.RecordEnd, Model.PageSize))</button>
+        }
+        else
+        {
+            <text>&nbsp;</text>
+        }
+    </div>
+</div>

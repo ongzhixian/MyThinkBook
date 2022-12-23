@@ -91,7 +91,7 @@ public class HomeController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> InstrumentsAsync(InstrumentSearchFormViewModel formModel, byte page = 1, byte pageSize = 12)
+    public async Task<IActionResult> InstrumentsAsync(InstrumentSearchFormViewModel formModel, string action, byte page = 1, byte pageSize = 12)
     {
         if (ModelState.IsValid)
         {
@@ -110,6 +110,11 @@ public class HomeController : Controller
             return View(viewModel);
         }
 
+        return View();
+    }
+
+    public IActionResult Instrument(string id)
+    {
         return View();
     }
 

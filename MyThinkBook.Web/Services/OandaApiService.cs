@@ -20,7 +20,7 @@ public class OandaRestApiService : IOandaRestApiService
 {
     private readonly ILogger<OandaRestApiService> logger;
     private readonly HttpClient httpClient;
-    private string accountNumber;
+    private readonly string accountNumber;
     private readonly IMemoryCache memoryCache;
 
     public OandaRestApiService(ILogger<OandaRestApiService> logger, HttpClient httpClient, IOptions<OandaOptions> oandaOptions, IMemoryCache memoryCache)

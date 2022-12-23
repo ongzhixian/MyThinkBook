@@ -31,7 +31,7 @@ public record DataPageModel<T> : IPageMetaData where T : class
 
     public int RecordEnd { get; set; }
 
-    public IEnumerable<T>? Data { get; set; }
+    public IEnumerable<T> Data { get; set; }
 
     public DataPageModel()
     {
@@ -39,8 +39,6 @@ public record DataPageModel<T> : IPageMetaData where T : class
 
     public DataPageModel(IEnumerable<T> dataList, byte page = 1, byte pageSize = 10)
     {
-        CurrentPage = page;
-
         PageSize = pageSize;
 
         int recordsToSkip = (page - 1) * pageSize;
@@ -53,9 +51,10 @@ public record DataPageModel<T> : IPageMetaData where T : class
 
         TotalPageCount = (TotalRecordCount / pageSize) + ((TotalRecordCount % pageSize) > 0 ? 1 : 0);
 
-        RecordStart = recordsToSkip + 1;
+        RecordStart = recordsToSkip + (TotalRecordCount > 0 ? 1 : 0);
 
         RecordEnd = recordsToSkip + Data.Count();
 
+        CurrentPage = TotalPageCount == 0 ? 0 : page;
     }
 }

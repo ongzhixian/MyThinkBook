@@ -1,6 +1,9 @@
 ﻿@using MyThinkBook.Web.Areas.FxTrading.Models;
 @using MyThinkBook.Web.Domain.OandaApi;
 @model InstrumentPageViewModel
+@{
+    ViewData["Title"] = "Instruments - Fx Trading";
+}
 @functions {
     public string GetAssetClassTag(List<Tag> tags)
     {
@@ -12,49 +15,49 @@
 
         <h2>Instruments information</h2>
 
-        <div>
-            <form asp-area="FxTrading" asp-controller="Home" asp-action="Instruments" method="post">
+        <form asp-area="FxTrading" asp-controller="Home" asp-action="Instruments" method="post">
+            <fieldset>
                 <label asp-for="FormModel.SearchTerm"></label>
                 <input asp-for="FormModel.SearchTerm" />
                 @*<input asp-for="Page" />*@
                 <button type="submit" class="btn">Search</button>
-            </form>
-        </div>
+            </fieldset>
 
-        <table class="u-full-width">
-            <thead>
-                <tr>
-                    <td colspan="3">
-                        @await Html.PartialAsync("_TablePaginationHeader", Model.DataPage)
-                    </td>
-                </tr>
-                <tr>
-                    <th>Name</th>
-                    <th>Code</th>
-                    <th>Asset class / Type</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var instrument in Model.DataPage.Data)
-                {
-                    <tr>
-                        <td>@instrument.Name</td>
-                        <td>@instrument.Code</td>
-                        <td>@GetAssetClassTag(instrument.Tags) / @instrument.Type</td>
-                    </tr>
-                }
-            </tbody>
-            @if (Model.DataPage.TotalPageCount > 1)
-            {
-                <tfoot>
+            <table class="u-full-width">
+                <thead>
                     <tr>
                         <td colspan="3">
-                            @await Html.PartialAsync("_TablePaginationFooter", Model.DataPage)
+                            @await Html.PartialAsync("_TablePaginationHeader", Model.DataPage)
                         </td>
                     </tr>
-                </tfoot>
-            }
-        </table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th>Asset class / Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var instrument in Model.DataPage.Data)
+                    {
+                        <tr>
+                            <td><a asp-area="FxTrading" asp-controller="Home" asp-action="Instrument" asp-route-id="@instrument.Code">@instrument.Name</a></td>
+                            <td>@instrument.Code</td>
+                            <td>@GetAssetClassTag(instrument.Tags) / @instrument.Type</td>
+                        </tr>
+                    }
+                </tbody>
+                @if (Model.DataPage.TotalPageCount > 1)
+                {
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">
+                                @await Html.PartialAsync("_TablePaginationFooterButtons", Model.DataPage)
+                            </td>
+                        </tr>
+                    </tfoot>
+                }
+            </table>
 
+        </form>
     </div>
 </div>

@@ -9,9 +9,6 @@ public class InstrumentSearchFormViewModel
 {
     [Display(Name = "Name contains", Description = "Search criteria")]
     public string SearchTerm { get; set; } = string.Empty;
-
-    [HiddenInput]
-    public byte Page { get; set; } = 1;
 }
 
 public class InstrumentPageViewModel
@@ -27,6 +24,10 @@ public class InstrumentPageViewModel
     }
 
     public InstrumentPageViewModel(DataPageModel<Instrument> dataPage) : this(dataPage, new())
+    {
+    }
+
+    public InstrumentPageViewModel() : this(new(), new())
     {
     }
 }

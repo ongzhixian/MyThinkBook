@@ -47,7 +47,6 @@ dotnet add .\MyThinkBook.Web\ package Microsoft.AspNetCore.Authentication.Micros
 dotnet add .\MyThinkBook.Web\ package Microsoft.VisualStudio.Web.CodeGeneration.Design
 dotnet aspnet-codegenerator identity -dc WebApp1.Data.ApplicationDbContext --files "Account.Register;Account.Login;Account.Logout;Account.RegisterConfirmation"
 
-
 dotnet add .\MyThinkBook.Web\ package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
 dotnet add .\MyThinkBook.Web\ package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 dotnet add .\MyThinkBook.Web\ package Microsoft.AspNetCore.Identity.UI
@@ -71,6 +70,9 @@ dotnet ef database update --context MyThinkBook.Web.Areas.Identity.Data.Identity
 
 dotnet ef migrations add 202212122215 --context MyThinkBook.Web.Data.MyThinkBookDbContext --project .\MyThinkBook.Web\
 dotnet ef database update --context MyThinkBook.Web.Data.MyThinkBookDbContext --project .\MyThinkBook.Web\
+
+
+
 
 http://localhost:5172
 
