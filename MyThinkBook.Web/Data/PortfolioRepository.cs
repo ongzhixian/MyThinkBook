@@ -10,7 +10,7 @@ public interface IPortfolioRepository
 {
     Task<int> SaveChangesAsync();
 
-    Task<PaginatedDataModel<Portfolio>> GetPaginatedPortfoliosAsync(byte page = 1, byte pageSize = 20);
+    Task<DataPageModel<Portfolio>> GetPaginatedPortfoliosAsync(byte page = 1, byte pageSize = 20);
 }
 
 public class PortfolioRepository : IPortfolioRepository
@@ -24,7 +24,7 @@ public class PortfolioRepository : IPortfolioRepository
         this.dbContext = dbContext;
     }
 
-    public async Task<PaginatedDataModel<Portfolio>> GetPaginatedPortfoliosAsync(byte page = 1, byte pageSize = 20)
+    public async Task<DataPageModel<Portfolio>> GetPaginatedPortfoliosAsync(byte page = 1, byte pageSize = 20)
     {
         int recordsToSkip = (page - 1) * pageSize;
 
@@ -40,7 +40,7 @@ public class PortfolioRepository : IPortfolioRepository
 
         int recordEnd = recordsToSkip + records.Count;
 
-        return new PaginatedDataModel<Portfolio>
+        return new DataPageModel<Portfolio>
         {
             CurrentPage = page,
             PageSize = pageSize,

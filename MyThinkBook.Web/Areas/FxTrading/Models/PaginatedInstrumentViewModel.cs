@@ -5,20 +5,28 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MyThinkBook.Web.Areas.FxTrading.Models;
 
-public class PaginatedInstrumentViewModel
+public class InstrumentSearchFormViewModel
 {
-    public PaginatedDataModel<Instrument> PagedData { get; set; }
-
-    [Display(Name = "Search", Description = "Search criteria")]
-    public string SearchTerm { get; set; }
+    [Display(Name = "Name contains", Description = "Search criteria")]
+    public string SearchTerm { get; set; } = string.Empty;
 
     [HiddenInput]
-    public byte Page { get; set; }
+    public byte Page { get; set; } = 1;
+}
 
-    public PaginatedInstrumentViewModel(PaginatedDataModel<Instrument> pagedData, byte page)
+public class InstrumentPageViewModel
+{
+    public DataPageModel<Instrument> DataPage { get; set; }
+
+    public InstrumentSearchFormViewModel FormModel { get; set; } = new();
+
+    public InstrumentPageViewModel(DataPageModel<Instrument> dataPage, InstrumentSearchFormViewModel formModel)
     {
-        this.PagedData = pagedData;
+        DataPage = dataPage;
+        FormModel = formModel;
+    }
 
-        this.Page = page;
+    public InstrumentPageViewModel(DataPageModel<Instrument> dataPage) : this(dataPage, new())
+    {
     }
 }

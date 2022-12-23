@@ -7,6 +7,7 @@ using MyThinkBook.Web.Domain.OandaApi;
 using MyThinkBook.Web.Models;
 using MyThinkBook.Web.Services;
 using System.Collections.Immutable;
+using System.Linq;
 
 namespace MyThinkBook.Web.Areas.FxTrading.Controllers;
 
@@ -81,34 +82,35 @@ public class HomeController : Controller
 
         var instrumentList = instrumentsResponse.InstrumentList.OrderBy(r => r.Name);
 
-        var pagedData = new PaginatedDataModel<Domain.OandaApi.Instrument>(instrumentList, page, pageSize);
+        var pagedData = new DataPageModel<Domain.OandaApi.Instrument>(instrumentList, page, pageSize);
 
-        PaginatedInstrumentViewModel viewModel = new PaginatedInstrumentViewModel(pagedData, page);
+        InstrumentPageViewModel viewModel = new InstrumentPageViewModel(pagedData);
 
         return View(viewModel);
     }
 
     [HttpPost]
-    public async Task<IActionResult> InstrumentsAsync(PaginatedInstrumentViewModel viewModel, byte page = 1, byte pageSize = 12)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> InstrumentsAsync(InstrumentSearchFormViewModel formModel, byte page = 1, byte pageSize = 12)
     {
         if (ModelState.IsValid)
         {
             var instrumentsResponse = await oandaRestApiService.GetInstrumentsAsync();
 
             var instrumentList = instrumentsResponse.InstrumentList
-                .Where(r => r.Name.Contains(viewModel.SearchTerm))
+                .Where(r => r.Name.Contains(formModel.SearchTerm, StringComparison.InvariantCultureIgnoreCase))
                 .OrderBy(r => r.Name);
 
-            var pagedData = new PaginatedDataModel<Domain.OandaApi.Instrument>(instrumentList, page, pageSize);
+            var pagedData = new DataPageModel<Domain.OandaApi.Instrument>(instrumentList, page, pageSize);
 
-            viewModel = new PaginatedInstrumentViewModel(pagedData, page);
+            var viewModel = new InstrumentPageViewModel(pagedData, formModel);
 
             ModelState.Clear();
 
             return View(viewModel);
         }
 
-        return View(viewModel);
+        return View();
     }
 
     public IActionResult Chat()

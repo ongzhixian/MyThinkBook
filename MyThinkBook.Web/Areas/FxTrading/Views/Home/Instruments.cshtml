@@ -1,6 +1,6 @@
 ﻿@using MyThinkBook.Web.Areas.FxTrading.Models;
 @using MyThinkBook.Web.Domain.OandaApi;
-@model PaginatedInstrumentViewModel
+@model InstrumentPageViewModel
 @functions {
     public string GetAssetClassTag(List<Tag> tags)
     {
@@ -13,10 +13,10 @@
         <h2>Instruments information</h2>
 
         <div>
-            <form method="post">
-                <label asp-for="SearchTerm"></label>
-                <input asp-for="SearchTerm" />
-                <input asp-for="Page" />
+            <form asp-area="FxTrading" asp-controller="Home" asp-action="Instruments" method="post">
+                <label asp-for="FormModel.SearchTerm"></label>
+                <input asp-for="FormModel.SearchTerm" />
+                @*<input asp-for="Page" />*@
                 <button type="submit" class="btn">Search</button>
             </form>
         </div>
@@ -25,7 +25,7 @@
             <thead>
                 <tr>
                     <td colspan="3">
-                        @await Html.PartialAsync("_TablePaginationHeader", Model.PagedData)
+                        @await Html.PartialAsync("_TablePaginationHeader", Model.DataPage)
                     </td>
                 </tr>
                 <tr>
@@ -35,7 +35,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var instrument in Model.PagedData.Data)
+                @foreach (var instrument in Model.DataPage.Data)
                 {
                     <tr>
                         <td>@instrument.Name</td>
@@ -44,12 +44,12 @@
                     </tr>
                 }
             </tbody>
-            @if (Model.PagedData.TotalPageCount > 1)
+            @if (Model.DataPage.TotalPageCount > 1)
             {
                 <tfoot>
                     <tr>
                         <td colspan="3">
-                            @await Html.PartialAsync("_TablePaginationFooter", Model.PagedData)
+                            @await Html.PartialAsync("_TablePaginationFooter", Model.DataPage)
                         </td>
                     </tr>
                 </tfoot>

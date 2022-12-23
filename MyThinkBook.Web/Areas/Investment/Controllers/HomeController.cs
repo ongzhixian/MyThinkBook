@@ -19,7 +19,7 @@ public class HomeController : Controller
 
     public async Task<IActionResult> IndexAsync(byte page = 1, byte pageSize = 10, string sort="")
     {
-        PaginatedDataModel<Portfolio> paginatedPortfolio = await portfolioRepository.GetPaginatedPortfoliosAsync(page, pageSize);
+        DataPageModel<Portfolio> paginatedPortfolio = await portfolioRepository.GetPaginatedPortfoliosAsync(page, pageSize);
 
         return View(paginatedPortfolio);
     }

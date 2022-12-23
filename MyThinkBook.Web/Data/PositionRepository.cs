@@ -10,7 +10,7 @@ public interface IPositionRepository
 {
     Task<int> SaveChangesAsync();
 
-    Task<PaginatedDataModel<Position>> GetPaginatedPositionsAsync(int id, byte page = 1, byte pageSize = 20);
+    Task<DataPageModel<Position>> GetPaginatedPositionsAsync(int id, byte page = 1, byte pageSize = 20);
 }
 
 public class PositionRepository : IPositionRepository
@@ -24,7 +24,7 @@ public class PositionRepository : IPositionRepository
         this.dbContext = dbContext;
     }
 
-    public async Task<PaginatedDataModel<Position>> GetPaginatedPositionsAsync(int id, byte page = 1, byte pageSize = 20)
+    public async Task<DataPageModel<Position>> GetPaginatedPositionsAsync(int id, byte page = 1, byte pageSize = 20)
     {
         int recordsToSkip = (page - 1) * pageSize;
 
@@ -41,7 +41,7 @@ public class PositionRepository : IPositionRepository
 
         int recordEnd = recordsToSkip + records.Count;
 
-        return new PaginatedDataModel<Position>
+        return new DataPageModel<Position>
         {
             CurrentPage = page,
             PageSize = pageSize,

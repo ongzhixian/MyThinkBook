@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Immutable;
-using static Dropbox.Api.Files.ListRevisionsMode;
+﻿using System.Collections.Immutable;
 
 namespace MyThinkBook.Web.Models;
 
-public interface IPaginationData
+public interface IPageMetaData
 {
     int CurrentPage { get; set; }
 
@@ -19,7 +17,7 @@ public interface IPaginationData
     int RecordEnd { get; set; }
 }
 
-public record PaginatedDataModel<T> : IPaginationData where T : class
+public record DataPageModel<T> : IPageMetaData where T : class
 {
     public int CurrentPage { get; set; }
 
@@ -35,11 +33,11 @@ public record PaginatedDataModel<T> : IPaginationData where T : class
 
     public IEnumerable<T>? Data { get; set; }
 
-    public PaginatedDataModel()
+    public DataPageModel()
     {
     }
 
-    public PaginatedDataModel(IEnumerable<T> dataList, byte page = 1, byte pageSize = 10)
+    public DataPageModel(IEnumerable<T> dataList, byte page = 1, byte pageSize = 10)
     {
         CurrentPage = page;
 
