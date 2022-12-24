@@ -76,6 +76,7 @@ public class OandaStreamApiService : IOandaStreamApiService
     private async Task SubscribeToPriceStreamAsync(CancellationToken cancellationToken)
     {
         string urlEncodedInstrumentCodes = WebUtility.UrlEncode(string.Join(',', instrumentCodes));
+        urlEncodedInstrumentCodes = WebUtility.UrlEncode("EUR_USD,XAU_USD");
 
         using var responseStream = await this.httpClient.GetStreamAsync($"/v3/accounts/{accountNumber}/pricing/stream?instruments={urlEncodedInstrumentCodes}", cancellationToken);
 

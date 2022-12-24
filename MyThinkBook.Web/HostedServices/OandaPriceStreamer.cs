@@ -1,9 +1,8 @@
 ﻿using MyThinkBook.Web.Services;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using System.Text;
 
 namespace MyThinkBook.Web.HostedServices;
+
+// Probably don't need this; we simply run the stream service as an API
 
 public class OandaPriceStreamer : IHostedService
 {

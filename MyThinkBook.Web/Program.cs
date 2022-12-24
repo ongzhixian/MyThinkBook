@@ -239,7 +239,7 @@ void AddDataRepositories(IServiceCollection services)
 void AddHostedServices(IServiceCollection services)
 {
     services.AddHostedService<CloudAmqpListener>();
-    services.AddHostedService<OandaPriceStreamer>();
+    //services.AddHostedService<OandaPriceStreamer>();
     //builder.Services.AddHostedService<FxTradingListener>();
 }
 
