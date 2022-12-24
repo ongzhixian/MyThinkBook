@@ -239,6 +239,7 @@ void AddDataRepositories(IServiceCollection services)
 void AddHostedServices(IServiceCollection services)
 {
     services.AddHostedService<CloudAmqpListener>();
+    services.AddHostedService<OandaPriceStreamer>();
     //builder.Services.AddHostedService<FxTradingListener>();
 }
 
@@ -249,6 +250,7 @@ void AddHttpClientServices(IServiceCollection services)
     services.AddHttpClient<IDropboxService, DropboxService>();
     services.AddHttpClient<ISgxScrapingService, SgxScrapingService>();
     services.AddHttpClient<IOandaRestApiService, OandaRestApiService>();
+    services.AddHttpClient<IOandaStreamApiService, OandaStreamApiService>();
 }
 
 void AddLoggingServices(IServiceCollection services)

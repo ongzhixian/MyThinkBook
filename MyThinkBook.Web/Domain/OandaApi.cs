@@ -203,3 +203,48 @@ public record InstrumentCandlesResponse
     [JsonPropertyName("candles")]
     public IEnumerable<Candle> CandleList { get; set; } = new List<Candle>();
 }
+
+public record PriceBucket
+{
+    [JsonPropertyName("price")]
+    public string Price { get; set; } = string.Empty;
+
+    [JsonPropertyName("liquidity")]
+    public decimal Liquidity { get; set; }
+}
+
+public record PriceStreamResponse
+{
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = string.Empty;
+
+    [JsonPropertyName("time")]
+    public string Time { get; set; } = string.Empty;
+
+    //"closeoutBid": "1796.460",
+    //"closeoutAsk": "1796.710",
+    //"status": "tradeable",
+    //"tradeable": true,
+    //"instrument": "XAU_USD"
+
+    [JsonPropertyName("closeoutBid")]
+    public string CloseoutBid { get; set; } = string.Empty;
+
+    [JsonPropertyName("closeoutAsk")]
+    public string CloseoutAsk { get; set; } = string.Empty;
+
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("tradeable")]
+    public bool Tradeable { get; set; } = false;
+
+    [JsonPropertyName("instrument")]
+    public string Instrument { get; set; } = string.Empty;
+
+    [JsonPropertyName("bids")]
+    public IEnumerable<PriceBucket>? Bids { get; set; } = new List<PriceBucket>();
+
+    [JsonPropertyName("asks")]
+    public IEnumerable<PriceBucket>? Asks { get; set; } = new List<PriceBucket>();
+}

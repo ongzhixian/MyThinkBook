@@ -19,15 +19,18 @@ public class HomeController : Controller
     private readonly IFxTradingEngineProxyService fxTradingEngineProxyService;
     //private readonly IGraphQLService graphQLService;
     private readonly IOandaRestApiService oandaRestApiService;
+    private readonly IOandaStreamApiService oandaStreamApiService;
 
     private readonly MyThinkBookDbContext myThinkBookDbContext;
 
-    public HomeController(ILogger<HomeController> logger, IFxTradingEngineProxyService fxTradingEngineProxyService, MyThinkBookDbContext myThinkBookDbContext, IOandaRestApiService oandaRestApiService)
+    public HomeController(ILogger<HomeController> logger, IFxTradingEngineProxyService fxTradingEngineProxyService, MyThinkBookDbContext myThinkBookDbContext, 
+        IOandaRestApiService oandaRestApiService, IOandaStreamApiService oandaStreamApiService)
     {
         this.logger = logger;
         this.fxTradingEngineProxyService = fxTradingEngineProxyService;
         this.myThinkBookDbContext = myThinkBookDbContext;
         this.oandaRestApiService = oandaRestApiService;
+        this.oandaStreamApiService = oandaStreamApiService;
 
         //this.graphQLService = graphQLService;
 
@@ -86,6 +89,9 @@ public class HomeController : Controller
         var pagedData = new DataPageModel<Domain.OandaApi.Instrument>(instrumentList, page, pageSize);
 
         InstrumentPageViewModel viewModel = new InstrumentPageViewModel(pagedData);
+
+        //oandaStreamApiService.SubscribePrice("XAU_USD");
+        //oandaStreamApiService.SubscribePrice("EUR_USD");
 
         return View(viewModel);
     }
@@ -200,5 +206,3 @@ public class HomeController : Controller
         return View(data);
     }
 }
-
-
