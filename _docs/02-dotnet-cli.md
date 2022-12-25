@@ -36,6 +36,10 @@ dotnet add .\MyThinkBook.Web\ package GraphQL
 dotnet add .\MyThinkBook.Web\ package Grpc.Tools
 dotnet add .\MyThinkBook.Web\ package Grpc.AspNetCore
 
+dotnet add .\MyThinkBook.Web\ package StackExchange.Redis
+dotnet add .\MyThinkBook.Web\ package Microsoft.Extensions.Caching.StackExchangeRedis
+
+dotnet add .\MyThinkBook.Web\ package MongoDB.Driver
 
 dotnet add .\MyThinkBook.Web\ package Microsoft.EntityFrameworkCore.Sqlite
 dotnet add .\MyThinkBook.Web\ package Microsoft.EntityFrameworkCore.Design

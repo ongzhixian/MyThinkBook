@@ -12,6 +12,7 @@ using NLog;
 using NLog.Web;
 using Microsoft.AspNetCore.HttpLogging;
 using MyThinkBook.Web.HostedServices;
+using Microsoft.Extensions.Caching.Distributed;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
@@ -50,7 +51,22 @@ try
     AddLoggingServices(builder.Services);
 
     AddHealthCheckServices(builder.Services);
-    
+
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = $"{builder.Configuration["redis:myThinkBook:url"]},password={builder.Configuration["redis:myThinkBook:password"]}";
+        options.InstanceName = builder.Configuration["redis:myThinkBook:instanceName"];
+    });
+
+    // Redis data store
+    // builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect($"{builder.Configuration["redis:myThinkBook:url"]},password={builder.Configuration["redis:myThinkBook:password"]}"));
+
+    // MongoDb
+    // MongoDbContext: IMongoDbContext
+    builder.Services.AddSingleton<MyThinkBook.Web.Data.IMongoDbContext, MyThinkBook.Web.Data.MongoDbContext>();
+    builder.Services.AddSingleton<IBookStoreMongoDbContext, BookStoreMongoDbContext>();
+    builder.Services.AddSingleton<IBookRepository, BookRepository>();
+
     // AddFileProviderServices
     //builder.Services.AddSingleton<IDropboxFileProvider, DropboxFileProvider>();
 
@@ -72,7 +88,7 @@ try
     //});
 
     AddDataRepositories(builder.Services);
-    
+
     AddHttpClientServices(builder.Services);
 
     AddHostedServices(builder.Services);
@@ -80,6 +96,8 @@ try
     //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     builder.Services.AddControllersWithViews();
+
+    builder.Services.AddDistributedMemoryCache();
 
     builder.Services.AddMemoryCache();
 
@@ -180,6 +198,11 @@ try
         defaults: new { area = "FxTrading", controller = "Home" });
 
     app.MapControllerRoute(
+        name: "ResourceControllerAction",
+        pattern: "/Resource/{controller=Home}/{action=Index}/{id?}",
+        defaults: new { area = "Resource" });
+
+    app.MapControllerRoute(
         name: "Resource",
         pattern: "/Resource/{id}",
         defaults: new { area = "Resource", controller = "Resource", action = "Index" });
@@ -199,6 +222,8 @@ try
     app.MapHub<FxTradingHub>("/fxTradingHub");
 
     //app.MapGrpcService<GreeterService>();
+
+    // 
 
     app.Run();
 }
@@ -349,10 +374,17 @@ void MapApplicationsSettings(ConfigurationManager configuration, IServiceCollect
         .ValidateOnStart();
 
     services.AddOptions<OandaOptions>()
-    .Bind(configuration.GetSection(OandaOptions.LocalConfigurationKey))
-    .Bind(configuration.GetSection(OandaOptions.SettingsConfigurationKey))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
+        .Bind(configuration.GetSection(OandaOptions.LocalConfigurationKey))
+        .Bind(configuration.GetSection(OandaOptions.SettingsConfigurationKey))
+        .ValidateDataAnnotations()
+        .ValidateOnStart();
+
+    services.AddOptions<MongoDbOptions>()
+        .Bind(configuration.GetSection(MongoDbOptions.LocalConfigurationKey))
+        .Bind(configuration.GetSection(MongoDbOptions.SettingsConfigurationKey))
+        .ValidateDataAnnotations()
+        .ValidateOnStart();
+    
 
     services.Configure<HealthCheckPublisherOptions>(options =>
     {

@@ -70,6 +70,7 @@ public class HomeController : Controller
             new Domain.Resource { Location = Domain.ResourceLocation.Cloud, Name = "Google Cloud", Category = "API" },
             new Domain.Resource { Location = Domain.ResourceLocation.Cloud, Name = "AWS", Category = "API" },
 
+            new Domain.Resource { Location = Domain.ResourceLocation.Cloud, Name = "Redis", Category = "Database" },
             new Domain.Resource { Location = Domain.ResourceLocation.Cloud, Name = "Atlas MongoDb", Category = "Database" },
             new Domain.Resource { Location = Domain.ResourceLocation.Cloud, Name = "Dropbox", Category = "Storage" },
             new Domain.Resource { Location = Domain.ResourceLocation.Cloud, Name = "CloudAmqp", Category = "Messaging" },
