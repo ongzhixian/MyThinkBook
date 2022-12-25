@@ -26,12 +26,12 @@ public class BookStoreMongoDbContext : IBookStoreMongoDbContext
 
     private void configureClassMapper()
     {
-        BsonClassMap.RegisterClassMap<Book>(mapper =>
-        {
-            //classMap.AutoMap();
-            //classMap.SetIgnoreExtraElements(true);
-            mapper.MapMember(c => c.Title).SetElementName("title"); ;
-        });
+        //BsonClassMap.RegisterClassMap<Book>(mapper =>
+        //{
+        //    //classMap.AutoMap();
+        //    //classMap.SetIgnoreExtraElements(true);
+        //    mapper.MapMember(c => c.Title).SetElementName("title"); ;
+        //});
     }
 
     public IMongoCollection<Book> Books => mongoDatabase.GetCollection<Book>("book");

@@ -34,9 +34,10 @@ public class MongoDbContext : IMongoDbContext
     {
         var conventionPack = new ConventionPack
         {
+            new CamelCaseElementNameConvention(),
             new IgnoreExtraElementsConvention(true)
         };
 
-        ConventionRegistry.Register("IgnoreExtraElementsForAllEntities", conventionPack, type => true);
+        ConventionRegistry.Register("MyThinkBookMongoDbConventions", conventionPack, type => true);
     }
 }
