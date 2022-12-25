@@ -43,3 +43,9 @@ div.records-page-summary {
 .resource-item {
     text-align:center;
 }
+
+.container.full-width {
+    max-width: 100%;
+    width: 100%;
+    padding: 0 1em;
+}

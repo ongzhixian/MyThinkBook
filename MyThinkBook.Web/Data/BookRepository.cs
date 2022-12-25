@@ -5,11 +5,9 @@ namespace MyThinkBook.Web.Data;
 
 public interface IBookRepository
 {
-    Task<int> SaveChangesAsync();
+    Task AddAsync(Book item);
 
-    void Add(Book item);
-
-    Task<List<Book>> ListAsync();
+    Task<IEnumerable<Book>> ListAsync();
 
 }
 
@@ -25,22 +23,16 @@ public class BookRepository : IBookRepository
         bookCollection = mongoDbContext.Books;
     }
 
-    public void Add(Book item)
+    public async Task AddAsync(Book item)
     {
-        throw new NotImplementedException();
-        
+        await bookCollection.InsertOneAsync(item);
     }
 
-    public async Task<List<Book>> ListAsync()
+    public async Task<IEnumerable<Book>> ListAsync()
     {
         //Builders<Book>.Projection.Exclude(b => b.)
         var bookCursor = await bookCollection.FindAsync(Builders<Book>.Filter.Empty);
-
+        
         return await bookCursor.ToListAsync();
-    }
-
-    public Task<int> SaveChangesAsync()
-    {
-        throw new NotImplementedException();
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyThinkBook.Web.Data;
+using MyThinkBook.Web.Domain;
+using MyThinkBook.Web.Models;
 
 namespace MyThinkBook.Web.Areas.Research.Controllers;
 
@@ -15,10 +17,18 @@ public class BookController : Controller
         this.bookRepository = bookRepository;
     }
 
-    public async Task<IActionResult> IndexAsync()
+    public async Task<IActionResult> IndexAsync(byte page = 1, byte pageSize = 10)
     {
-        List<Domain.Book> books = await bookRepository.ListAsync();
+        //await bookRepository.AddAsync(new Domain.Book
+        //{
+        //    Title = "Some new title",
+        //    Author = "some new author"
+        //});
 
-        return View(books);
+        var books = await bookRepository.ListAsync();
+
+        DataPageModel<Book> viewModel = new DataPageModel<Book>(books, page, pageSize);
+
+        return View(viewModel);
     }
 }

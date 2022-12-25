@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MvcMovie.Data;
-using MyThinkBook.Data.MongoDb;
 using MyThinkBook.Web.Data;
 using MyThinkBook.Web.HealthChecks;
 using MyThinkBook.Web.Hubs;
@@ -343,7 +342,7 @@ void AddDbContexts(ConfigurationManager configuration, IServiceCollection servic
 
 void MapApplicationsSettings(ConfigurationManager configuration, IServiceCollection services)
 {
-    services.Configure<MongoDbSettings>(configuration.GetSection("MongoDbSettings"));
+    //services.Configure<MongoDbSettings>(configuration.GetSection("MongoDbSettings"));
 
     //builder.Services.Configure<DropboxOptions>(options => {
     //    var settingsSection = builder.Configuration.GetSection(DropboxOptions.ConfigurationKey);

@@ -79,10 +79,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\MyThinkBook.Data.MongoDb\MyThinkBook.Data.MongoDb.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Protobuf Include="protos\helloworld.proto" />
 	</ItemGroup>
 
