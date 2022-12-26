@@ -1,0 +1,44 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+textarea {
+    height: auto;
+}
+
+#canvas {
+    height: 100%;
+    width: 100%;
+}
+
+    #canvas.full-screen {
+        position: absolute;
+    }
+
+
+.bi-panel-layout {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+    .bi-panel-layout .left-panel {
+        width: 100vw;
+        height: 100vh;
+        /*background-color: green;*/
+        /*color: white;*/
+    }
+
+    .bi-panel-layout .right-panel {
+        width: 30vw;
+        /*color: green;*/
+        height: 100vh;
+        border-left: .67px groove #1EAEDB;
+        overflow-y: scroll;
+    }
