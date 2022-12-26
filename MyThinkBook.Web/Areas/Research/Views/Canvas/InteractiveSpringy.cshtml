@@ -29,12 +29,50 @@
 
             <label for="graphData">Data</label>
             <textarea class="u-full-width" id="graphData" rows="20" spellcheck="false">
-#nodes
-monty
-bianca;{'color': '#00A0B0'}
-
 #edges
-bianca->monty</textarea>
+hannu-123->ac
+hannu-123->tac
+ac->ac01
+ac->ac02
+ac->ac03
+ac->ac04
+tac->tac01
+tac->tac02
+tac->tac03
+ac01->ac01a
+ac01->ac01b
+ac01->ac01c
+ac02->ac02a
+ac02->ac02b
+
+ac03->ac03a
+ac03->ac03b
+
+ac04->ac04a
+ac04->ac04b
+ac04->ac04c
+
+tac01->tac01a
+tac01->tac01b
+
+tac02->tac02a
+tac02->tac02b
+
+tac03->tac03a
+tac03->tac03b
+tac03->tac03c
+tac03->tac03d
+
+hannu-123->desc
+hannu-123->topic
+hannu-123->tags
+tags->tag1
+tags->tag2
+tags->tag3
+tags->tag4
+
+#nodes
+ac;{'color': '#00A0B0'}</textarea>
             <button class="button-primary" type="button" id="updateButton">Update</button>
         </form>
 
@@ -65,11 +103,21 @@ bianca->monty</textarea>
                 return;
             }
 
-            let label = match.groups['id'].trim();
+            let nodeId = match.groups['id'].trim();
 
             let jsonData = match.groups['dataJson'] ? JSON.parse(match.groups['dataJson'].trim().replaceAll("'", "\"")) : undefined;
 
-            return graph.addNode(new Springy.Node(label, jsonData));
+            let srcNode = graph.nodeSet[nodeId];
+
+            debugger;
+
+            if (srcNode) {
+                srcNode.data = { ...jsonData }
+                return srcNode;
+            } 
+
+            srcNode = new Springy.Node(nodeId, jsonData);
+            return graph.addNode(srcNode);
         }
 
         function addEdge(command, graph) {
