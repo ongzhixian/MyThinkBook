@@ -23,8 +23,8 @@
 	  <Compile Remove="Data\ConfigurationKeys.cs" />
 	  <Compile Remove="Data\DataContextConnectionStrings.cs" />
 	  <Compile Remove="Data\MiniToolsDataContext.cs" />
-	  <Compile Remove="Domain\ContosoUniversity.cs" />
-	  <Compile Remove="Domain\Warehouse.cs" />
+	  <Compile Remove="_Domain\ContosoUniversity.cs" />
+	  <Compile Remove="_Domain\Warehouse.cs" />
 	  <Compile Remove="HostedServices\FxTradingListener.cs" />
 	  <Compile Remove="Infrastructure\DropboxFileProvider.cs" />
 	  <Compile Remove="Infrastructure\IDropboxFileProvider.cs" />
@@ -83,18 +83,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="Areas\Resource\Views\Home\Index.cshtml" />
-	  <None Include="Areas\Resource\Views\Shared\_ResourceLayout.cshtml" />
-	  <None Include="Areas\Resource\Views\Shared\_Layout.cshtml" />
-	  <None Include="Areas\Resource\Views\Shared\_ProjectList.cshtml" />
-	  <None Include="Areas\Resource\Views\Shared\_SideNavBar.cshtml" />
-	  <None Include="Areas\Resource\Views\_ViewImports.cshtml" />
-	  <None Include="Areas\Resource\Views\_ViewStart.cshtml" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Folder Include="Areas\AgileTool\Data\" />
 	  <Folder Include="Areas\AgileTool\Models\" />
+	  <Folder Include="Areas\Inventory\Data\" />
+	  <Folder Include="Areas\Inventory\Models\" />
 	  <Folder Include="Areas\Investment\Data\" />
 	  <Folder Include="Areas\Investment\Models\" />
 	  <Folder Include="Areas\Research\Data\" />

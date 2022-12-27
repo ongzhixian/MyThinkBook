@@ -1,0 +1,192 @@
+﻿@using MyThinkBook.Web.Areas.Receive.Models;
+@model ReceiveFormViewModel
+@{
+    ViewData["Title"] = "Receive";
+    int entryIndex;
+}
+
+@await Html.PartialAsync("_WmsTopNavBar")
+
+<div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+        <br><br>
+        <h1 class="header center orange-text">Receive</h1>
+
+        <div class="row">
+            <form class="col s12" id="receiveForm" method="post">
+
+                @for (entryIndex = 0; entryIndex < Model.ReceiveEntries.Count; entryIndex++)
+                {
+                    <div class="row item-input-row">
+
+                        <div class="input-field col s5">
+                            <i class="material-icons prefix">textsms</i>
+                            <input asp-for="ReceiveEntries[entryIndex].Name" class="autocomplete item-name" />
+                            <label asp-for="ReceiveEntries[entryIndex].Name"></label>
+                        </div>
+
+                        <div class="input-field col s2">
+                            <input asp-for="ReceiveEntries[entryIndex].Quantity" class="validate item-quantity">
+                            <label asp-for="ReceiveEntries[entryIndex].Quantity">Quantity</label>
+                        </div>
+
+                        <div class="input-field col s2">
+                            <select asp-for="ReceiveEntries[entryIndex].Unit" asp-items="Model.UnitOfMeasureList" class="item-unit"></select>
+                            <label asp-for="ReceiveEntries[entryIndex].Unit">Unit of Measure</label>
+                        </div>
+
+                        <div class="input-field col s3">
+                            <button class="btn waves-effect waves-light" type="button" name="action" title="Add entry" onclick="addEntry();" tabindex="-1">
+                                <i class="material-icons right">playlist_add</i>
+                            </button>
+                            <button class="btn waves-effect waves-light" type="button" name="action" title="Copy entry" tabindex="-1">
+                                <i class="material-icons right">content_copy</i>
+                            </button>
+                            <button class="btn waves-effect waves-light" type="button" name="action" title="Remove entry" tabindex="-1">
+                                <i class="material-icons right">delete</i>
+                            </button>
+                        </div>
+                    </div>
+                }
+
+                <button class="btn waves-effect waves-light" type="submit" id="submitButton">
+                    Submit  <i class="material-icons right">send</i>
+                </button>
+
+                <input type="hidden" value="@(entryIndex)" id="entryIndex" />
+                <input type="hidden" value="@Model.ReceiveEntries" id="model" />
+
+            </form>
+        </div>
+
+
+        <div class="row center">
+            <h5 class="header col s12 light">An receive module built on ASP.NET Core using Material Design.</h5>
+        </div>
+        <div class="row center">
+            <a href="javascript:void(0);" id="download-button" class="btn-large waves-effect waves-light orange">Get Started</a>
+        </div>
+        <br><br>
+
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="section">
+
+        <!--   Icon Section   -->
+        <div class="row">
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 class="center light-blue-text"><i class="material-icons">flash_on</i></h2>
+                    <h5 class="center">Speeds up development</h5>
+
+                    <p class="light">We did most of the heavy lifting for you to provide a default stylings that incorporate our custom components. Additionally, we refined animations and transitions to provide a smoother experience for developers.</p>
+                </div>
+            </div>
+
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 class="center light-blue-text"><i class="material-icons">group</i></h2>
+                    <h5 class="center">User Experience Focused</h5>
+
+                    <p class="light">By utilizing elements and principles of Material Design, we were able to create a framework that incorporates components and animations that provide more feedback to users. Additionally, a single underlying responsive system across all platforms allow for a more unified user experience.</p>
+                </div>
+            </div>
+
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
+                    <h5 class="center">Easy to work with</h5>
+
+                    <p class="light">We have provided detailed documentation as well as specific code examples to help new users get started. We are also always open to feedback and can answer any questions a user may have about Materialize.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <br><br>
+</div>
+
+@await Html.PartialAsync("_WmsFooter")
+
+@section Scripts {
+    <script type="text/javascript">
+        "use strict";
+
+        const submitButton = document.getElementById("submitButton");
+        const receiveForm = document.getElementById("receiveForm");
+        const hiddenEntryIndex = document.getElementById("entryIndex");
+
+        function addEntry() {
+
+            var itemInputRow = document.querySelector(".row.item-input-row");
+
+            // Destroy MaterializeCss elements first before clone; obviously we would need to restore it later
+
+            let existingAutoCompleteElement = itemInputRow.querySelector(".autocomplete");
+            let existingSelectElement = itemInputRow.querySelector("select");
+
+            var existingAutoCompleteInstance = M.Autocomplete.getInstance(existingAutoCompleteElement);
+            existingAutoCompleteInstance.destroy();
+
+            var existingSelectInstance = M.FormSelect.getInstance(existingSelectElement);
+            existingSelectInstance.destroy();
+
+            var newNode = itemInputRow.cloneNode(true);
+
+            // Figure out last index
+
+            let newEntryIndex = parseInt(hiddenEntryIndex.value, 10);
+
+            // Update id and name ; id="ReceiveEntries_0__Unit" name="ReceiveEntries[0].Unit"
+
+            const nameSubstitutionRegex = /(?<model>\w+)\[(?<index>\d+)\](?<prop>.+)/gm;
+            const idSubstitutionRegex = /(?<model>\w+)_(?<index>\d+)__(?<prop>.+)/gm;
+
+            newNode.querySelectorAll("[name]").forEach((element, index, arr) => {
+                let newName = element.name.replace(nameSubstitutionRegex, `$1[${newEntryIndex}]$3`);
+                element.name = newName;
+            });
+
+            newNode.querySelectorAll("[id]").forEach((element, index, arr) => {
+                let newId = element.id.replace(idSubstitutionRegex, `$1_${newEntryIndex}__$3`);
+                element.id = newId;
+            });
+
+            newNode.querySelectorAll("[for]").forEach((element, index, arr) => {
+                let newFor = element.getAttribute("for").replace(idSubstitutionRegex, `$1_${newEntryIndex}__$3`);
+                element.setAttribute("for", newFor);
+            });
+
+            // Insert HTML into form
+
+            receiveForm.insertBefore(newNode, submitButton);
+
+            // Setup events for form elements
+
+            var newAutoComplete = document.querySelectorAll(`#ReceiveEntries_${newEntryIndex}__Name`);
+            M.Autocomplete.init(newAutoComplete);
+
+            var newSelect = document.querySelectorAll(`#ReceiveEntries_${newEntryIndex}__Unit`);
+            M.FormSelect.init(newSelect);
+
+            // Restore original element Materialize CSS components
+
+            M.Autocomplete.init(existingAutoCompleteElement);
+            M.FormSelect.init(existingSelectElement);
+
+            hiddenEntryIndex.value = newEntryIndex + 1;
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var autoCompleteElements = document.querySelectorAll('.autocomplete');
+            var autoCompleteInstances = M.Autocomplete.init(autoCompleteElements);
+
+            var selectElements = document.querySelectorAll('select');
+            var selectInstances = M.FormSelect.init(selectElements);
+        });
+    </script>
+}

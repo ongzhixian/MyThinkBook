@@ -1,19 +1,26 @@
 ﻿<nav class="side-nav">
     <div class="title">Links</div>
     <ul>
-        <li><a class="nav-link" asp-area="Research" asp-controller="Book" asp-action="Index">Books</a></li>
-        <li><a class="nav-link" asp-area="Research" asp-controller="Topic" asp-action="Index">Topics</a></li>
         <li><a class="nav-link" asp-area="Research" asp-controller="Collectible" asp-action="Index">Collectibles</a></li>
 
-        @if (@Context.Request.Path != "/Research")
-        {
+        <li><a class="nav-link" asp-area="AgileTool" asp-controller="Home" asp-action="Index">Agile Tools</a></li>
+
+        <li><a class="nav-link" asp-area="Research" asp-controller="Topic" asp-action="Index">Topics</a></li>
+    </ul>
+
+    @if (@Context.Request.Path != "/Research")
+    {
         <hr />
 
-        <li><a class="nav-link" asp-area="Research" asp-controller="Home" asp-action="Index">Research</a></li>
-        }
+        <ul>
+            <li><a class="nav-link" asp-area="Research" asp-controller="Home" asp-action="Index">Research</a></li>
+        </ul>
 
-        <hr />
+    }
 
+    <hr />
+
+    <ul>
         <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">MyThinkBook</a></li>
     </ul>
 </nav>
