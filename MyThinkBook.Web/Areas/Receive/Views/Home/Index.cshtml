@@ -17,7 +17,7 @@
 
                 @for (entryIndex = 0; entryIndex < Model.ReceiveEntries.Count; entryIndex++)
                 {
-                    <div class="row item-input-row" id="entry@(entryIndex)">
+                    <div class="row item-input-row">
 
                         <div class="input-field col s5">
                             <i class="material-icons prefix">textsms</i>
@@ -42,7 +42,7 @@
                             <button class="btn waves-effect waves-light" type="button" name="action" title="Copy entry" tabindex="-1">
                                 <i class="material-icons right">content_copy</i>
                             </button>
-                            <button class="btn waves-effect waves-light" type="button" name="action" title="Remove entry" tabindex="-1" onclick="deleteEntry(@(entryIndex));">
+                            <button class="btn waves-effect waves-light" type="button" name="action" title="Remove entry" tabindex="-1" onclick="deleteEntry(this);">
                                 <i class="material-icons right">delete</i>
                             </button>
                         </div>
@@ -121,7 +121,6 @@
 
         function resequence(rowElement, rowIndex) {
             
-            // itemInputRow.nextElementSibling
             console.log("rowIndex", rowIndex);
 
             if (rowElement.id === 'submitButton') {
@@ -131,14 +130,11 @@
             const nameSubstitutionRegex = /(?<model>\w+)\[(?<index>\d+)\](?<prop>.+)/gm;
             const idSubstitutionRegex = /(?<model>\w+)_(?<index>\d+)__(?<prop>.+)/gm;
 
-            debugger;
-
             rowElement.querySelectorAll("input[name],select[name]").forEach((element, index, arr) => {
                 let newName = element.name.replace(nameSubstitutionRegex, `$1[${rowIndex}]$3`);
                 element.name = newName;
                 console.log("newName", newName);
             });
-
 
             rowElement.querySelectorAll("input[id],select[id]").forEach((element, index, arr) => {
                 let newId = element.id.replace(idSubstitutionRegex, `$1_${rowIndex}__$3`);
@@ -156,9 +152,24 @@
         }
         
 
-        function deleteEntry(entryIndexId) {
+        function deleteEntry(buttonElement) {
 
-            let itemInputRow = document.getElementById(`entry${entryIndexId}`);
+            let itemInputRow = buttonElement.parentElement.parentElement;
+
+            // If this is the last row, do nothing
+            if (itemInputRow.parentElement.querySelectorAll(".item-input-row").length === 1) {
+                return;
+            }
+
+            var inputElementName = itemInputRow.querySelector("input.autocomplete").name;
+
+            const nameSubstitutionRegex = /(?<model>\w+)\[(?<index>\d+)\](?<prop>.+)/gm;
+
+            let entryIndexId = inputElementName.replace(nameSubstitutionRegex, `$2`);
+
+            // document.getElementById(`entry${entryIndexId}`);
+            
+            
             
             // Destroy MaterializeCss elements first
 
@@ -208,17 +219,17 @@
             const nameSubstitutionRegex = /(?<model>\w+)\[(?<index>\d+)\](?<prop>.+)/gm;
             const idSubstitutionRegex = /(?<model>\w+)_(?<index>\d+)__(?<prop>.+)/gm;
 
-            newNode.querySelectorAll("[name]").forEach((element, index, arr) => {
+            newNode.querySelectorAll("input[name],select[name]").forEach((element, index, arr) => {
                 let newName = element.name.replace(nameSubstitutionRegex, `$1[${newEntryIndex}]$3`);
                 element.name = newName;
             });
 
-            newNode.querySelectorAll("[id]").forEach((element, index, arr) => {
+            newNode.querySelectorAll("input[id],select[id]").forEach((element, index, arr) => {
                 let newId = element.id.replace(idSubstitutionRegex, `$1_${newEntryIndex}__$3`);
                 element.id = newId;
             });
 
-            newNode.querySelectorAll("[for]").forEach((element, index, arr) => {
+            newNode.querySelectorAll("label[for]").forEach((element, index, arr) => {
                 let newFor = element.getAttribute("for").replace(idSubstitutionRegex, `$1_${newEntryIndex}__$3`);
                 element.setAttribute("for", newFor);
             });
