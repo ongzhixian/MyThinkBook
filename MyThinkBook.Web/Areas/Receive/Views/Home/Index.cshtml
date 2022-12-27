@@ -17,7 +17,7 @@
 
                 @for (entryIndex = 0; entryIndex < Model.ReceiveEntries.Count; entryIndex++)
                 {
-                    <div class="row item-input-row">
+                    <div class="row item-input-row" id="entry@(entryIndex)">
 
                         <div class="input-field col s5">
                             <i class="material-icons prefix">textsms</i>
@@ -36,13 +36,13 @@
                         </div>
 
                         <div class="input-field col s3">
-                            <button class="btn waves-effect waves-light" type="button" name="action" title="Add entry" onclick="addEntry();" tabindex="-1">
+                            <button class="btn waves-effect waves-light" type="button" name="action" title="Add entry" tabindex="-1" onclick="addEntry();">
                                 <i class="material-icons right">playlist_add</i>
                             </button>
                             <button class="btn waves-effect waves-light" type="button" name="action" title="Copy entry" tabindex="-1">
                                 <i class="material-icons right">content_copy</i>
                             </button>
-                            <button class="btn waves-effect waves-light" type="button" name="action" title="Remove entry" tabindex="-1">
+                            <button class="btn waves-effect waves-light" type="button" name="action" title="Remove entry" tabindex="-1" onclick="deleteEntry(@(entryIndex));">
                                 <i class="material-icons right">delete</i>
                             </button>
                         </div>
@@ -119,19 +119,82 @@
         const receiveForm = document.getElementById("receiveForm");
         const hiddenEntryIndex = document.getElementById("entryIndex");
 
+        function resequence(rowElement, rowIndex) {
+            
+            // itemInputRow.nextElementSibling
+            console.log("rowIndex", rowIndex);
+
+            if (rowElement.id === 'submitButton') {
+                return rowIndex;
+            }
+
+            const nameSubstitutionRegex = /(?<model>\w+)\[(?<index>\d+)\](?<prop>.+)/gm;
+            const idSubstitutionRegex = /(?<model>\w+)_(?<index>\d+)__(?<prop>.+)/gm;
+
+            debugger;
+
+            rowElement.querySelectorAll("input[name],select[name]").forEach((element, index, arr) => {
+                let newName = element.name.replace(nameSubstitutionRegex, `$1[${rowIndex}]$3`);
+                element.name = newName;
+                console.log("newName", newName);
+            });
+
+
+            rowElement.querySelectorAll("input[id],select[id]").forEach((element, index, arr) => {
+                let newId = element.id.replace(idSubstitutionRegex, `$1_${rowIndex}__$3`);
+                element.id = newId;
+                console.log("newId", newId);
+            });
+
+            rowElement.querySelectorAll("label[for]").forEach((element, index, arr) => {
+                let newFor = element.getAttribute("for").replace(idSubstitutionRegex, `$1_${rowIndex}__$3`);
+                element.setAttribute("for", newFor);
+                console.log("newFor", newFor);
+            });
+
+            return resequence(rowElement.nextElementSibling, ++rowIndex);
+        }
+        
+
+        function deleteEntry(entryIndexId) {
+
+            let itemInputRow = document.getElementById(`entry${entryIndexId}`);
+            
+            // Destroy MaterializeCss elements first
+
+            let existingAutoCompleteElement = itemInputRow.querySelector(".autocomplete");
+            let existingSelectElement = itemInputRow.querySelector("select");
+
+            let existingAutoCompleteInstance = M.Autocomplete.getInstance(existingAutoCompleteElement);
+            existingAutoCompleteInstance.destroy();
+
+            let existingSelectInstance = M.FormSelect.getInstance(existingSelectElement);
+            existingSelectInstance.destroy();
+
+            // If we delete a row that is not the last row, we need re-sequence the index.
+
+            var newIndex = resequence(itemInputRow.nextElementSibling, entryIndexId);
+            
+            itemInputRow.remove();
+
+            // After we re-sequence index, we need to update entryIndex
+            hiddenEntryIndex.value = newIndex;
+
+        }
+
         function addEntry() {
 
-            var itemInputRow = document.querySelector(".row.item-input-row");
+            let itemInputRow = document.querySelector(".row.item-input-row");
 
             // Destroy MaterializeCss elements first before clone; obviously we would need to restore it later
 
             let existingAutoCompleteElement = itemInputRow.querySelector(".autocomplete");
             let existingSelectElement = itemInputRow.querySelector("select");
 
-            var existingAutoCompleteInstance = M.Autocomplete.getInstance(existingAutoCompleteElement);
+            let existingAutoCompleteInstance = M.Autocomplete.getInstance(existingAutoCompleteElement);
             existingAutoCompleteInstance.destroy();
 
-            var existingSelectInstance = M.FormSelect.getInstance(existingSelectElement);
+            let existingSelectInstance = M.FormSelect.getInstance(existingSelectElement);
             existingSelectInstance.destroy();
 
             var newNode = itemInputRow.cloneNode(true);
