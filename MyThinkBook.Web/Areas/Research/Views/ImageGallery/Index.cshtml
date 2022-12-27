@@ -1,0 +1,28 @@
+﻿@using MyThinkBook.Web.Areas.FxTrading.Models;
+@model IndexViewModel
+@{
+    ViewData["Title"] = "Image Gallery";
+}
+
+<div class="two columns">
+</div>
+
+<div class="eight columns">
+    <div class="container">
+
+        <h3>Springy.js</h3>
+        
+        <ul class="no-marker">
+            <!-- https://codepen.io/gabrielajohnson/pen/EMVxEL -->
+            <li><a asp-area="Research" asp-controller="ImageGallery" asp-action="SimpleSpringy">Hexagon gallery</a></li>
+            <li><a asp-area="Research" asp-controller="ImageGallery" asp-action="SimpleSpringy">Gallery type2</a></li>
+            
+        </ul>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @*<script src="~/js/fxTrading.js"></script>*@
+}
