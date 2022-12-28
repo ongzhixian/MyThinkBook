@@ -10,6 +10,8 @@
         <br><br>
         <h1 class="header center orange-text">Client</h1>
 
+        <input type="text" placeholder="Company name contains" id="searchCriteriaInput" /> <button class="btn" type="button" id="searchButton">Search</button>
+
         <table>
             <thead>
                 <tr>
@@ -127,3 +129,35 @@
         </div>
     </div>
 </footer>
+
+@section Scripts {
+    <script type="text/javascript">
+        "use strict";
+
+        const searchButton = document.getElementById("searchButton");
+        const searchCriteriaInput = document.getElementById("searchCriteriaInput");
+
+        document.addEventListener('DOMContentLoaded', function(ev) {
+            searchButton.addEventListener('click', function(ev) {
+
+                let request = new XMLHttpRequest();
+                request.open("POST", '/api/Client', true);
+                request.setRequestHeader("Content-Type", "@System.Net.Mime.MediaTypeNames.Application.Json");
+                request.onreadystatechange = () => {
+                    if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
+                        // Request finished. Do processing here.
+                        //debugger;
+                        //JSON.parse(request.response);
+                    }
+                }
+
+                let postParams = {
+                    "searchTerm" : "group",
+                    "page": 1,
+                    "pageSize": 12
+                };
+                request.send(JSON.stringify(postParams));
+            });
+        });
+        </script>
+}

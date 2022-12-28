@@ -19,7 +19,7 @@ public class HomeController : Controller
     {
         logger.LogInformation("{page}, {pageSize}", page, pageSize);
 
-        Models.DataPageModel<MyThinkBook.Domain.Wms.Client> viewModel = await clientRepository.GetPaginatedClientsAsync(page, pageSize);
+        Web.Models.DataPageModel<MyThinkBook.Domain.Wms.Client> viewModel = await clientRepository.GetPaginatedClientsAsync(page, pageSize);
 
         return View(viewModel);
     }

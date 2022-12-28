@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MyThinkBook.Web.Areas.Client.Models;
 using MyThinkBook.Web.Data;
+using MyThinkBook.Web.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,14 +22,16 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<Models.DataPageModel<MyThinkBook.Domain.Wms.Client>> GetAsync(byte page = 1, byte pageSize = 10, string sort = "")
+    public async Task<DataPageModel<MyThinkBook.Domain.Wms.Client>> GetAsync(byte page = 1, byte pageSize = 10, string sort = "")
     {
         return await clientRepository.GetPaginatedClientsAsync(page, pageSize);
     }
 
-    public async Task<List<MyThinkBook.Domain.Wms.Client>> SearchAsync(string searchTerm, byte page = 1, byte pageSize = 10)
+    [HttpPost]
+    [Consumes(System.Net.Mime.MediaTypeNames.Application.Json)]
+    public async Task<List<string>> SearchAsync([FromBody] ClientApiSearchRequest request)
     {
-        return await clientRepository.NameContainsAsync(searchTerm, page, pageSize);
+        return await clientRepository.ClientNameLikeAsync(request.SearchTerm, request.Page, request.PageSize);
     }
 
     //// GET api/<ApplicationController>/5
@@ -54,3 +59,4 @@ public class ClientController : ControllerBase
     //{
     //}
 }
+

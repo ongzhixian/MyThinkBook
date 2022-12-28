@@ -12,10 +12,14 @@ public interface IClientRepository
     Task<int> SaveChangesAsync();
 
     Task<DataPageModel<Client>> GetPaginatedClientsAsync(byte page = 1, byte pageSize = 20);
+    
+
     void Add(Client item);
 
 
     Task<List<Client>> NameContainsAsync(string searchTerm, byte page, byte pageSize);
+
+    Task<List<string>> ClientNameLikeAsync(string searchTerm, byte page = 1, byte pageSize = 12);
 }
 
 public class ClientRepository : IClientRepository
@@ -73,17 +77,49 @@ public class ClientRepository : IClientRepository
     {
         int recordsToSkip = (page - 1) * pageSize;
 
-        var result = await dbContext.Clients
-            .Where(r => r.Name.Contains(searchTerm))
+        try
+        {
+            var result = await dbContext.Clients
+            .Where(r => EF.Functions.Like(r.Name, $"%{searchTerm}%"))
             .OrderBy(p => p.Name)
             .Skip(recordsToSkip)
             .Take(pageSize)
             .ToListAsync();
 
-        logger.LogInformation("{methodName} {searchTerm} {page}, {pageSize} returns {resultType} {result}",
-            nameof(GetPaginatedClientsAsync), searchTerm, page, pageSize, nameof(List<Client>), result);
+            logger.LogInformation("{methodName} {searchTerm} {page}, {pageSize} returns {resultType} {result}",
+                nameof(GetPaginatedClientsAsync), searchTerm, page, pageSize, nameof(List<Client>), result);
 
-        return result;
+            return result;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public async Task<List<string>> ClientNameLikeAsync(string searchTerm, byte page = 1, byte pageSize = 12)
+    {
+        int recordsToSkip = (page - 1) * pageSize;
+
+        try
+        {
+            var result = await dbContext.Clients
+                .Where(r => EF.Functions.Like(r.Name, $"%{searchTerm}%"))
+                .OrderBy(p => p.Name)
+                .Skip(recordsToSkip)
+                .Take(pageSize)
+                .Select(r => r.Name)
+                .ToListAsync();
+
+            logger.LogInformation("{methodName} {searchTerm} {page}, {pageSize} returns {resultType} {result}",
+                nameof(GetPaginatedClientsAsync), searchTerm, page, pageSize, nameof(List<Client>), result);
+
+            return result;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
     public async Task<int> SaveChangesAsync()
