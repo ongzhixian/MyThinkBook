@@ -13,7 +13,7 @@
         <h1 class="header center orange-text">Receive</h1>
 
         <div class="row">
-            <form class="col s12" id="receiveForm" method="post">
+            <form class="col s12" id="receiveForm" method="post" onsubmit="return validateForm(this);">
 
                 @for (entryIndex = 0; entryIndex < Model.ReceiveEntries.Count; entryIndex++)
                 {
@@ -21,12 +21,12 @@
 
                         <div class="input-field col s5">
                             <i class="material-icons prefix">textsms</i>
-                            <input asp-for="ReceiveEntries[entryIndex].Name" class="autocomplete item-name" />
+                            <input asp-for="ReceiveEntries[entryIndex].Name" class="autocomplete item-name" required="" aria-required="true" />
                             <label asp-for="ReceiveEntries[entryIndex].Name"></label>
                         </div>
 
                         <div class="input-field col s2">
-                            <input asp-for="ReceiveEntries[entryIndex].Quantity" class="validate item-quantity">
+                            <input asp-for="ReceiveEntries[entryIndex].Quantity" class="validate item-quantity" required="" aria-required="true" data-validator="decimal" />
                             <label asp-for="ReceiveEntries[entryIndex].Quantity">Quantity</label>
                         </div>
 
@@ -36,14 +36,14 @@
                         </div>
 
                         <div class="input-field col s3">
-                            <button class="btn waves-effect waves-light" type="button" name="action" title="Add entry" tabindex="-1" onclick="addEntry();">
-                                <i class="material-icons right">playlist_add</i>
+                            <button class="btn waves-effect waves-light" type="button" name="action" title="Add entry" tabindex="-1" onclick="addInputRow(true);">
+                                <i class="material-icons">playlist_add</i>
                             </button>
-                            <button class="btn waves-effect waves-light" type="button" name="action" title="Copy entry" tabindex="-1">
-                                <i class="material-icons right">content_copy</i>
+                            <button class="btn waves-effect waves-light" type="button" name="action" title="Copy entry" tabindex="-1" onclick="addInputRow(false);">
+                                <i class="material-icons">content_copy</i>
                             </button>
-                            <button class="btn waves-effect waves-light" type="button" name="action" title="Remove entry" tabindex="-1" onclick="deleteEntry(this);">
-                                <i class="material-icons right">delete</i>
+                            <button class="btn waves-effect waves-light" type="button" name="action" title="Remove entry" tabindex="-1" onclick="deleteInputRow(this);">
+                                <i class="material-icons">delete</i>
                             </button>
                         </div>
                     </div>
@@ -119,17 +119,32 @@
         const receiveForm = document.getElementById("receiveForm");
         const hiddenEntryIndex = document.getElementById("entryIndex");
 
-        function resequence(rowElement, rowIndex) {
-            
-            console.log("rowIndex", rowIndex);
+        const nameSubstitutionRegex = /(?<model>\w+)\[(?<index>\d+)\](?<prop>.+)/gm;
+        const idSubstitutionRegex = /(?<model>\w+)_(?<index>\d+)__(?<prop>.+)/gm;
 
-            if (rowElement.id === 'submitButton') {
-                return rowIndex;
-            }
+        function validateForm(formElement) {
 
-            const nameSubstitutionRegex = /(?<model>\w+)\[(?<index>\d+)\](?<prop>.+)/gm;
-            const idSubstitutionRegex = /(?<model>\w+)_(?<index>\d+)__(?<prop>.+)/gm;
+            // TODO: Check if customer is filled.
 
+            // For each data row, check that all details are filled.
+
+            let inputRows = formElement.querySelectorAll(".item-input-row");
+
+            inputRows.forEach((inputRowElement, index, arr) => {
+
+                // Ensure that all item are filled.
+                let namedElements = inputRowElement.querySelectorAll("input[name], .select-dropdown.dropdown-trigger");
+
+                namedElements.forEach((element) => {
+                    element.focus();
+                    element.blur();
+                });
+            });
+
+            return formElement.querySelectorAll(".invalid").length === 0;
+        }
+
+        function renameFormElements(rowElement, rowIndex) {
             rowElement.querySelectorAll("input[name],select[name]").forEach((element, index, arr) => {
                 let newName = element.name.replace(nameSubstitutionRegex, `$1[${rowIndex}]$3`);
                 element.name = newName;
@@ -147,12 +162,20 @@
                 element.setAttribute("for", newFor);
                 console.log("newFor", newFor);
             });
+        }
+
+        function resequence(rowElement, rowIndex) {
+
+            if (rowElement.id === 'submitButton') {
+                return rowIndex;
+            }
+
+            renameFormElements(rowElement, rowIndex);
 
             return resequence(rowElement.nextElementSibling, ++rowIndex);
         }
-        
 
-        function deleteEntry(buttonElement) {
+        function deleteInputRow(buttonElement) {
 
             let itemInputRow = buttonElement.parentElement.parentElement;
 
@@ -161,54 +184,42 @@
                 return;
             }
 
-            var inputElementName = itemInputRow.querySelector("input.autocomplete").name;
-
-            const nameSubstitutionRegex = /(?<model>\w+)\[(?<index>\d+)\](?<prop>.+)/gm;
-
-            let entryIndexId = inputElementName.replace(nameSubstitutionRegex, `$2`);
-
-            // document.getElementById(`entry${entryIndexId}`);
-            
-            
-            
-            // Destroy MaterializeCss elements first
+            // Destroy Materialize form elements
 
             let existingAutoCompleteElement = itemInputRow.querySelector(".autocomplete");
             let existingSelectElement = itemInputRow.querySelector("select");
 
-            let existingAutoCompleteInstance = M.Autocomplete.getInstance(existingAutoCompleteElement);
-            existingAutoCompleteInstance.destroy();
-
-            let existingSelectInstance = M.FormSelect.getInstance(existingSelectElement);
-            existingSelectInstance.destroy();
+            M.Autocomplete.getInstance(existingAutoCompleteElement).destroy();
+            M.FormSelect.getInstance(existingSelectElement).destroy();
 
             // If we delete a row that is not the last row, we need re-sequence the index.
 
-            var newIndex = resequence(itemInputRow.nextElementSibling, entryIndexId);
-            
+            let inputElementName = itemInputRow.querySelector("input.autocomplete").name;
+
+            let entryIndexId = inputElementName.replace(nameSubstitutionRegex, `$2`);
+
+            let newIndex = resequence(itemInputRow.nextElementSibling, entryIndexId);
+
             itemInputRow.remove();
 
             // After we re-sequence index, we need to update entryIndex
-            hiddenEntryIndex.value = newIndex;
 
+            hiddenEntryIndex.value = newIndex;
         }
 
-        function addEntry() {
+        function addInputRow(isBlankForm = true) {
 
             let itemInputRow = document.querySelector(".row.item-input-row");
 
-            // Destroy MaterializeCss elements first before clone; obviously we would need to restore it later
+            // Destroy MaterializeCss form elements first before clone; obviously we would need to restore it later
 
             let existingAutoCompleteElement = itemInputRow.querySelector(".autocomplete");
             let existingSelectElement = itemInputRow.querySelector("select");
 
-            let existingAutoCompleteInstance = M.Autocomplete.getInstance(existingAutoCompleteElement);
-            existingAutoCompleteInstance.destroy();
+            M.Autocomplete.getInstance(existingAutoCompleteElement).destroy();
+            M.FormSelect.getInstance(existingSelectElement).destroy();
 
-            let existingSelectInstance = M.FormSelect.getInstance(existingSelectElement);
-            existingSelectInstance.destroy();
-
-            var newNode = itemInputRow.cloneNode(true);
+            let newInputRow = itemInputRow.cloneNode(true);
 
             // Figure out last index
 
@@ -216,35 +227,55 @@
 
             // Update id and name ; id="ReceiveEntries_0__Unit" name="ReceiveEntries[0].Unit"
 
-            const nameSubstitutionRegex = /(?<model>\w+)\[(?<index>\d+)\](?<prop>.+)/gm;
-            const idSubstitutionRegex = /(?<model>\w+)_(?<index>\d+)__(?<prop>.+)/gm;
+            renameFormElements(newInputRow, newEntryIndex);
 
-            newNode.querySelectorAll("input[name],select[name]").forEach((element, index, arr) => {
-                let newName = element.name.replace(nameSubstitutionRegex, `$1[${newEntryIndex}]$3`);
-                element.name = newName;
-            });
+            if (isBlankForm) {
 
-            newNode.querySelectorAll("input[id],select[id]").forEach((element, index, arr) => {
-                let newId = element.id.replace(idSubstitutionRegex, `$1_${newEntryIndex}__$3`);
-                element.id = newId;
-            });
+                // Empty all input values
 
-            newNode.querySelectorAll("label[for]").forEach((element, index, arr) => {
-                let newFor = element.getAttribute("for").replace(idSubstitutionRegex, `$1_${newEntryIndex}__$3`);
-                element.setAttribute("for", newFor);
-            });
+                newInputRow.querySelectorAll("input[name]").forEach((element, index, arr) => {
+                    element.value = '';
+                });
+
+                newInputRow.querySelectorAll("select[name]").forEach((element, index, arr) => {
+                    element.selectedIndex = -1
+                });
+            }
 
             // Insert HTML into form
 
-            receiveForm.insertBefore(newNode, submitButton);
+            receiveForm.insertBefore(newInputRow, submitButton);
 
             // Setup events for form elements
 
-            var newAutoComplete = document.querySelectorAll(`#ReceiveEntries_${newEntryIndex}__Name`);
-            M.Autocomplete.init(newAutoComplete);
+            var newAutoCompleteElements = document.querySelectorAll(`#ReceiveEntries_${newEntryIndex}__Name`);
+            let newAutoCompleteInstances = M.Autocomplete.init(newAutoCompleteElements);
 
-            var newSelect = document.querySelectorAll(`#ReceiveEntries_${newEntryIndex}__Unit`);
-            M.FormSelect.init(newSelect);
+            var newSelectElements = document.querySelectorAll(`#ReceiveEntries_${newEntryIndex}__Unit`);
+            let newSelectInstances = M.FormSelect.init(newSelectElements);
+
+            // Attach validator for all input elements with name attribute
+            let rowInputElements = newInputRow.querySelectorAll('.item-input-row input[name]');
+
+            rowInputElements.forEach((element, index, array) => {
+                
+                let dataValidator = element.getAttribute('data-validator');
+
+                if (dataValidator === null) {
+                    attachRequiredValidation(element);
+                    return;
+                }
+
+                if (dataValidator.trim() === "decimal") {
+                    attachRequiredDecimalValidation(element);
+                    return;
+                }
+            });
+
+            // Attach validator for to select element
+            newSelectInstances.forEach((element, index, array) => {
+                attachRequiredValidationForMaterializeSelect(element);
+            });
 
             // Restore original element Materialize CSS components
 
@@ -254,13 +285,120 @@
             hiddenEntryIndex.value = newEntryIndex + 1;
         }
 
-
         document.addEventListener('DOMContentLoaded', function () {
             var autoCompleteElements = document.querySelectorAll('.autocomplete');
             var autoCompleteInstances = M.Autocomplete.init(autoCompleteElements);
 
             var selectElements = document.querySelectorAll('select');
             var selectInstances = M.FormSelect.init(selectElements);
+
+            // Attach validator for all input elements with name attribute
+            let rowInputElements = document.querySelectorAll('.item-input-row input[name]');
+
+            rowInputElements.forEach((element, index, array) => {
+                
+                let dataValidator = element.getAttribute('data-validator');
+
+                if (dataValidator === null) {
+                    attachRequiredValidation(element);
+                    return;
+                }
+
+                if (dataValidator.trim() === "decimal") {
+                    attachRequiredDecimalValidation(element);
+                    return;
+                }
+            });
+
+            // Attach validator for all select elements with name attribute
+            selectInstances.forEach((element, index, array) => {
+                attachRequiredValidationForMaterializeSelect(element);
+            });
         });
+
+        // addInvalidCssClass -- add invalid css class if html element value equals to valueToCompare
+        function adjustCssClass(htmlElement, valueToCompare) {
+
+            if (htmlElement.value === valueToCompare) {
+
+                if (!htmlElement.classList.contains("invalid")) {
+                    htmlElement.classList.add("invalid");
+                }
+
+                return;
+            }
+
+            if (htmlElement.classList.contains("invalid")) {
+                htmlElement.classList.remove("invalid");
+            }
+        }
+
+
+        function attachRequiredValidationForMaterializeSelect(element) {
+
+            // Get the text of the option whose value is empty string.
+
+            let defaultOptionText = element.el.options.item("").text;
+
+            element.dropdownOptions.childNodes.forEach((listItemElement, index, array) => {
+
+                listItemElement.addEventListener('click', (e) => {
+
+                    adjustCssClass(element.input, defaultOptionText);
+
+                });
+            });
+
+            ['input', 'blur'].forEach((eventName) => {
+
+                element.input.addEventListener(eventName, (e) => {
+
+                    adjustCssClass(e.currentTarget, defaultOptionText);
+
+                });
+            });
+
+        }
+
+        function attachRequiredValidation(element) {
+
+            ['input', 'blur'].forEach((eventName) => {
+
+                element.addEventListener(eventName, (e) => {
+
+                    adjustCssClass(e.currentTarget, "");
+
+                });
+            });
+        }
+
+        function attachRequiredDecimalValidation(element) {
+
+            ['input', 'blur'].forEach((eventName) => {
+
+                element.addEventListener(eventName, (e) => {
+
+                    const decimalRegex = /^(\d*\.)?\d+$/gm;
+
+                    let htmlElement = e.currentTarget;
+
+                    debugger;
+
+                    if (!decimalRegex.test(htmlElement.value)) {
+
+                        if (!htmlElement.classList.contains("invalid")) {
+                            htmlElement.classList.add("invalid");
+                        }
+
+                        return;
+                    }
+
+                    if (htmlElement.classList.contains("invalid")) {
+                        htmlElement.classList.remove("invalid");
+                    }
+
+                });
+            });
+        }
     </script>
 }

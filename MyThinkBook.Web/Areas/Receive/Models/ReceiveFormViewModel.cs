@@ -8,7 +8,6 @@ public record ReceiveFormViewModel
 {
     public IList<ReceiveEntry> ReceiveEntries { get; set; } = new List<ReceiveEntry>();
 
-
     public List<SelectListItem> UnitOfMeasureList { get; } = new List<SelectListItem>
     {
         //<option value="" disabled selected>Pick unit</option>
@@ -21,9 +20,13 @@ public record ReceiveFormViewModel
 
 public record ReceiveEntry
 {
+    [Required]
     public string Name { get; set; } = string.Empty;
-    
+
+    [Required]
+    //[RegularExpression(@"^[0-9]+(\.[0-9]{1,100})$", ErrorMessage = "Valid Decimal number with maximum  decimal places.")]
     public string Quantity { get; set; } = string.Empty;
 
+    [Required]
     public string Unit { get; set; } = string.Empty;
 }
