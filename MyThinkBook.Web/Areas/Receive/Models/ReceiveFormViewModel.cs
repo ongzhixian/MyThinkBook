@@ -16,6 +16,18 @@ public record ReceiveFormViewModel
         new SelectListItem { Value = "2", Text = "Option 2" },
         new SelectListItem { Value = "3", Text = "Option 3"  },
     };
+
+    public override string ToString()
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+        foreach (var entry in ReceiveEntries)
+        {
+            sb.AppendLine(entry.ToString());
+        }
+
+        return sb.ToString();
+    }
 }
 
 public record ReceiveEntry
@@ -29,4 +41,9 @@ public record ReceiveEntry
 
     [Required]
     public string Unit { get; set; } = string.Empty;
+
+    public override string ToString()
+    {
+        return $"{Quantity} {Unit} of {Name}";
+    }
 }

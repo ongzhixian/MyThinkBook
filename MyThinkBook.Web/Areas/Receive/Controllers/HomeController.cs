@@ -6,6 +6,13 @@ namespace MyThinkBook.Web.Areas.Receive.Controllers;
 [Area("Receive")]
 public class HomeController : Controller
 {
+    private readonly ILogger<HomeController> logger;
+
+    public HomeController(ILogger<HomeController> logger)
+    {
+        this.logger = logger;
+    }
+
     public IActionResult Index()
     {
         ReceiveFormViewModel viewModel = new ReceiveFormViewModel();
@@ -23,6 +30,7 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult Index(ReceiveFormViewModel viewModel)
     {
+        logger.LogInformation("viewModel {viewModel}", viewModel);
         return View(viewModel);
     }
 

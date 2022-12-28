@@ -119,8 +119,8 @@
         const receiveForm = document.getElementById("receiveForm");
         const hiddenEntryIndex = document.getElementById("entryIndex");
 
-        const nameSubstitutionRegex = /(?<model>\w+)\[(?<index>\d+)\](?<prop>.+)/gm;
-        const idSubstitutionRegex = /(?<model>\w+)_(?<index>\d+)__(?<prop>.+)/gm;
+        const nameSubstitutionRegex = /(?<model>\w+)\[(?<index>\d+)\](?<prop>.+)/m;
+        const idSubstitutionRegex = /(?<model>\w+)_(?<index>\d+)__(?<prop>.+)/m;
 
         function validateForm(formElement) {
 
@@ -378,11 +378,9 @@
 
                 element.addEventListener(eventName, (e) => {
 
-                    const decimalRegex = /^(\d*\.)?\d+$/gm;
+                    const decimalRegex = /^\d*\.?\d*$/m;
 
                     let htmlElement = e.currentTarget;
-
-                    debugger;
 
                     if (!decimalRegex.test(htmlElement.value)) {
 
