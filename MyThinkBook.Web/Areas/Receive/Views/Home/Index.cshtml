@@ -296,7 +296,11 @@
             let rowInputElements = document.querySelectorAll('.item-input-row input[name]');
 
             rowInputElements.forEach((element, index, array) => {
-                
+
+                if (element.classList.contains("autocomplete")) {
+                    attachAutoCompletion(element);
+                }
+
                 let dataValidator = element.getAttribute('data-validator');
 
                 if (dataValidator === null) {
@@ -316,6 +320,16 @@
             });
         });
 
+        function debounce(func, timeout = 300) {
+            let timer;
+            return (...args) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => { 
+                    func.apply(this, args); 
+                }, timeout);
+            };
+        }
+
         // addInvalidCssClass -- add invalid css class if html element value equals to valueToCompare
         function adjustCssClass(htmlElement, valueToCompare) {
 
@@ -333,6 +347,11 @@
             }
         }
 
+        function attachAutoCompletion(element) {
+            element.addEventListener('input', debounce(function () {
+                console.log("Do ajax call here");
+            }, 678));
+        }
 
         function attachRequiredValidationForMaterializeSelect(element) {
 
@@ -365,9 +384,7 @@
             ['input', 'blur'].forEach((eventName) => {
 
                 element.addEventListener(eventName, (e) => {
-
                     adjustCssClass(e.currentTarget, "");
-
                 });
             });
         }

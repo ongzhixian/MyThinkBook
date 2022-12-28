@@ -31,6 +31,8 @@ public record Item
     // Who / What / Where / When / How
 
     public string Name { get; set; } = string.Empty;
+
+    
 }
 
 public record StoredItem
@@ -58,3 +60,8 @@ public class InventoryPlaceHolder
 // Receive
 // Send
 // Setup
+
+public record Customer
+{
+    public string Name { get; set; } = string.Empty;
+}
