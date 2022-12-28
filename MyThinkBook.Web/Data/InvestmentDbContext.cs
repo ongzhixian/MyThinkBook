@@ -24,10 +24,6 @@ public class InvestmentDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //base.OnModelCreating(modelBuilder);
-
-        Console.WriteLine("OnModelCreating");
-
         modelBuilder.Entity<Portfolio>(e =>
         {
             e.ToTable("portfolio");

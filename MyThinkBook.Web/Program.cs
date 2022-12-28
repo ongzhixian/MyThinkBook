@@ -336,6 +336,10 @@ void AddDbContexts(ConfigurationManager configuration, IServiceCollection servic
         .UseSqlite(configuration.GetConnectionString("InvestmentDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'InvestmentDbContextSqlite' not found."))
         .EnableSensitiveDataLogging());
 
+    services.AddDbContextPool<WmsDbContext>(options => options
+        .UseSqlite(configuration.GetConnectionString("WmsDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'WmsDbContextSqlite' not found."))
+        .EnableSensitiveDataLogging());
+
     //builder.Services.AddDbContext<IdentityDataContext>(options =>
     //    options.UseSqlite(builder.Configuration.GetConnectionString("MyThinkBookDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'MyThinkBookDbContextSqlite' not found.")));
 }
