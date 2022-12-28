@@ -2,20 +2,20 @@
 @model IPageMetaData
 
 <div class="row pagination">
-    <div class="one-half column">
+    <div class="col s6">
         @if (Model.CurrentPage != 1)
         {
-            <a class="button nav" asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="@ViewContext.RouteData.Values["controller"]" asp-action="@ViewContext.RouteData.Values["action"]" asp-route-page="@(Model.CurrentPage - 1)">Previous @Model.PageSize</a>
+            <a class="waves-effect waves-light btn" asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="@ViewContext.RouteData.Values["controller"]" asp-action="@ViewContext.RouteData.Values["action"]" asp-route-page="@(Model.CurrentPage - 1)"><i class="material-icons right">navigate_next</i>Previous @Model.PageSize</a>
         }
         else
         {
             <text>&nbsp;</text>
         }
     </div>
-    <div class="one-half column" style="text-align:right;">
+    <div class="col s6" style="text-align:right;">
         @if (Model.CurrentPage != Model.TotalPageCount)
         {
-            <a class="button nav" asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="@ViewContext.RouteData.Values["controller"]" asp-action="@ViewContext.RouteData.Values["action"]" asp-route-page="@(Model.CurrentPage + 1)">Next @(Math.Min(Model.TotalRecordCount - Model.RecordEnd, Model.PageSize))</a>
+            <a class="waves-effect waves-light btn" asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="@ViewContext.RouteData.Values["controller"]" asp-action="@ViewContext.RouteData.Values["action"]" asp-route-page="@(Model.CurrentPage + 1)"><i class="material-icons right">navigate_next</i>Next @(Math.Min(Model.TotalRecordCount - Model.RecordEnd, Model.PageSize))</a>
         }
         else
         {

@@ -258,6 +258,8 @@ void AddDataRepositories(IServiceCollection services)
     services.AddScoped<IPortfolioRepository, PortfolioRepository>();
     services.AddScoped<IPositionRepository, PositionRepository>();
     services.AddScoped<IInstrumentRepository, InstrumentRepository>();
+
+    services.AddScoped<IClientRepository, ClientRepository>();
 }
 
 void AddHostedServices(IServiceCollection services)

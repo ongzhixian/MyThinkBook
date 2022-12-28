@@ -31,7 +31,7 @@ public record DataPageModel<T> : IPageMetaData where T : class
 
     public int RecordEnd { get; set; }
 
-    public IEnumerable<T> Data { get; set; }
+    public IEnumerable<T> Data { get; set; } = Enumerable.Empty<T>();
 
     public DataPageModel()
     {
