@@ -22,12 +22,12 @@ public class MyThinkBookDbContext : DbContext
 
     public MyThinkBookDbContext()
     {
-        Console.WriteLine("MyThinkBookDbContext constructor with no parameters");
+        //Console.WriteLine("MyThinkBookDbContext constructor with no parameters");
     }
 
     public MyThinkBookDbContext(DbContextOptions<MyThinkBookDbContext> options) : base(options)
     {
-        Console.WriteLine("MyThinkBookDbContext constructor with options");
+        //Console.WriteLine("MyThinkBookDbContext constructor with options");
     }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -40,7 +40,7 @@ public class MyThinkBookDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        Console.WriteLine("MyThinkBookDbContext OnConfiguring");
+        //Console.WriteLine("MyThinkBookDbContext OnConfiguring");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
