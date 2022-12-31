@@ -1,11 +1,16 @@
 ﻿<nav class="side-nav">
     <div class="title">Links</div>
     <ul>
-        <li><a class="nav-link" asp-area="Research" asp-controller="Collectible" asp-action="Index">Collectibles</a></li>
+        <li><a class="nav-link" asp-area="Research" asp-controller="BrowserBookmark" asp-action="Index">Bookmarks</a></li>
 
         <li><a class="nav-link" asp-area="AgileTool" asp-controller="Home" asp-action="Index">Agile Tools</a></li>
 
-        <li><a class="nav-link" asp-area="Research" asp-controller="Topic" asp-action="Index">Topics</a></li>
+        <li><a class="nav-link" asp-area="Research" asp-controller="Tag" asp-action="Index">Tags</a></li>
+
+        <li><a class="nav-link" asp-area="Research" asp-controller="MachineLearning" asp-action="Index">Machine Learning</a></li>
+
+        <li><a class="nav-link" asp-area="Research" asp-controller="Iot" asp-action="Index">IoT</a></li>
+
     </ul>
 
     @if (@Context.Request.Path != "/Research")

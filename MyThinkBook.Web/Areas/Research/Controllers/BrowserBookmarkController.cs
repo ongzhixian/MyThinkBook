@@ -7,13 +7,13 @@ using MyThinkBook.Web.Extensions;
 namespace MyThinkBook.Web.Areas.Research.Controllers;
 
 [Area("Research")]
-public class CollectibleController : Controller
+public class BrowserBookmarkController : Controller
 {
-    private readonly ILogger<CollectibleController> logger;
+    private readonly ILogger<BrowserBookmarkController> logger;
     private readonly IHyperlinkRepository hyperlinkRepository;
     private readonly IUrlLinkRepository urlLinkRepository;
 
-    public CollectibleController(ILogger<CollectibleController> logger
+    public BrowserBookmarkController(ILogger<BrowserBookmarkController> logger
         , IHyperlinkRepository hyperlinkRepository
         , IUrlLinkRepository urlLinkRepository)
     {
@@ -26,13 +26,13 @@ public class CollectibleController : Controller
     {
         return View();
     }
-    public IActionResult HyperlinkAnalytics()
+    public IActionResult BookmarkAnalytics( )
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> HyperlinkAnalyticsAsync(string action)
+    public async Task<IActionResult> BookmarkAnalyticsAsync(string action)
     {
         switch (action)
         {
@@ -85,7 +85,7 @@ public class CollectibleController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> HyperlinkAsync(HyperlinkViewModel viewModel)
+    public async Task<IActionResult> BookmarkAsync(HyperlinkViewModel viewModel)
     {
         if (ModelState.IsValid)
         {
