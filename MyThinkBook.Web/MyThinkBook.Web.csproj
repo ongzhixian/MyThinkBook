@@ -85,6 +85,7 @@
 	<ItemGroup>
 	  <Folder Include="Areas\AgileTool\Data\" />
 	  <Folder Include="Areas\AgileTool\Models\" />
+	  <Folder Include="Areas\Bookstore\Data\" />
 	  <Folder Include="Areas\Inventory\Data\" />
 	  <Folder Include="Areas\Inventory\Models\" />
 	  <Folder Include="Areas\Investment\Data\" />

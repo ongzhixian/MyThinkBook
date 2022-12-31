@@ -1,0 +1,81 @@
+﻿@using MyThinkBook.Web.Areas.Bookstore.Models;
+@model SearchViewModel
+@{
+    ViewData["Title"] = "My Bookstore";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="twelve columns">
+            <h1 style="text-align:center;">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="two columns">&nbsp;</div>
+        <div class="eight columns">
+            <div class="container">
+
+                <form method="post" style="text-align:center;">
+                    <input asp-for="SearchTerm" style="width:25em;" />
+                    <button type="submit">Search</button>
+                </form>
+
+            </div>
+        </div>
+        <div class="two columns">&nbsp;</div>
+    </div>
+
+    <div class="row">
+        <div class="twelve columns">
+
+            <p>
+                Go to 
+                <a href="#">shopping cart</a>
+            </p>
+
+            <hr/>
+
+            <h2>Recommendations</h2>
+
+            <table class="u-full-width">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Book1</td>
+                        <td>$26.00</td>
+                        <td><input type="text" class="integer" style="width:5em" /></td>
+                    </tr>
+                    <tr>
+                        <td>Book2</td>
+                        <td>$42.00</td>
+                        <td><input type="text" class="integer" style="width:5em" /></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+<div class="links" style="position:absolute; top:0px; right:0px;">
+    <a asp-area="" asp-controller="Home" asp-action="Index" style="margin-right:.67em">Back to MyThinkBook</a>
+</div>
+
+<div class="links" style="position:absolute; top:0px; left:0px;">
+    <a asp-area="Bookstore" asp-controller="Administration" asp-action="Index" style="margin-left:.67em">Administration</a>
+</div>
+
+@section Scripts {
+    @*<script src="~/js/fxTrading.js"></script>*@
+}

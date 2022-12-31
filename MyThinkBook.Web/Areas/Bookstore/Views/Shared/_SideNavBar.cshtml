@@ -1,0 +1,28 @@
+﻿<nav class="side-nav">
+    <div class="title">Links</div>
+    <ul>
+        <li><a class="nav-link" asp-area="Bookstore" asp-controller="Data" asp-action="Index">Data</a></li>
+
+        <li><a class="nav-link" asp-area="Bookstore" asp-controller="Home" asp-action="IndexAjax">Index (Ajax)</a></li>
+
+        @*        
+        <li><a class="nav-link" asp-area="Investment" asp-controller="Topic" asp-action="Index">Topics</a></li>
+        <li><a class="nav-link" asp-area="Investment" asp-controller="Collectible" asp-action="Index">Collectibles</a></li>
+        *@
+    </ul>
+
+    @if (@Context.Request.Path != "/Bookstore")
+    {
+        <hr />
+
+        <ul>
+            <li><a class="nav-link" asp-area="Bookstore" asp-controller="Home" asp-action="Index">Bookstore</a></li>
+        </ul>
+    }
+
+    <hr />
+
+    <ul>
+        <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">MyThinkBook</a></li>
+    </ul>
+</nav>

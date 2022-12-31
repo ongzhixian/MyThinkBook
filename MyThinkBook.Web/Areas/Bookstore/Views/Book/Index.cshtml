@@ -1,0 +1,195 @@
+﻿@using MyThinkBook.Web.Areas.Bookstore.Models;
+@model SearchViewModel
+@{
+    ViewData["Title"] = "Manage My Bookstore Books";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="twelve columns">
+            <h1 style="text-align:center;">@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+</div>
+
+<div class="container full-width">
+    <div class="row">
+
+        <div class="one-half column" style="padding: 0 1em;">
+
+            <div class="container">
+                <div class="row">
+
+                    <div class="four columns">
+                        <div class="counter">
+                            <div class="title">Books</div>
+                            <div class="value">0</div>
+                        </div>
+                    </div>
+
+                    <div class="four columns"></div>
+
+                    <div class="four columns"></div>
+
+                </div>
+            </div>
+
+            <hr />
+
+            <h2>Book(s)</h2>
+
+            <p>n/a</p>
+            @*
+            <table class="u-full-width">
+            <thead>
+            <tr>
+            <th>Name</th>
+            <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>Book1</td>
+            <td>$26.00</td>
+            </tr>
+            <tr>
+            <td>Book2</td>
+            <td>$42.00</td>
+            </tr>
+            </tbody>
+            </table>
+            *@
+
+        </div>
+
+        <div class="one-half column" style="padding: 0 1em;">
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="bookTitleInput">Title</label>
+                    <input class="u-full-width" type="text" placeholder="Book title" id="bookTitleInput" />
+                </div>
+            </div>
+
+            <label for="bookAuthorsTextarea">Author(s)</label>
+            <textarea class="u-full-width" placeholder="Author(s)" id="bookAuthorsTextarea"></textarea>
+
+            <label for="bookPublishersTextarea">Publisher(s)</label>
+            <textarea class="u-full-width" placeholder="Publisher(s)" id="bookPublishersTextarea"></textarea>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="bookFormatSelect">Book format</label>
+                    <select class="u-full-width" id="bookFormatSelect">
+                        <option value="Paperback">Paperback</option>
+                        <option value="Hardcover">Hardcover</option>
+                        <option value="Mobi">Mobi</option>
+                        <option value="Pdf">Pdf</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="tag">Tags</label>
+                    <input class="u-full-width" type="text" placeholder="Book tags" id="bookTagsInput" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <label for="bookIsbnInput">ISBN</label>
+                    <input class="u-full-width" type="text" placeholder="Book ISBN" id="bookIsbnInput" />
+                </div>
+            </div>
+
+            <button class="button-primary" type="button" id="addBookButton">Add book</button>
+            <button class="button-primary" type="button" id="updateDetailsButton">Update</button>
+            <button class="button" type="button" id="clearButton">Clear</button>
+
+        </div>
+
+    </div>
+</div>
+
+
+<div class="links" style="position:absolute; top:0px; right:0px;">
+    <a asp-area="" asp-controller="Home" asp-action="Index" style="margin-right:.67em">Back to MyThinkBook</a>
+</div>
+
+<div class="links" style="position:absolute; top:0px; left:0px;">
+    <a asp-area="Bookstore" asp-controller="Administration" asp-action="Index" style="margin-left:.67em">Administration</a>
+    <a asp-area="Bookstore" asp-controller="Book" asp-action="Index">Books</a>
+</div>
+
+@section Scripts {
+    @*<script src="~/js/fxTrading.js"></script>*@
+
+    <script type="text/javascript">
+        "use strict";
+
+        function addBook(jsonRequest) {
+            let request = new XMLHttpRequest();
+
+            request.open("POST", '/api/bookstore/book', true);
+
+            request.setRequestHeader("Content-Type", "@System.Net.Mime.MediaTypeNames.Application.Json");
+
+            request.onreadystatechange = () => {
+                if (request.readyState === XMLHttpRequest.DONE && request.status === 200) {
+                    // Request finished. Do processing here.
+                    //JSON.parse(request.response);
+                }
+            }
+
+            request.send(JSON.stringify(jsonRequest));
+        }
+
+        window.addEventListener("DOMContentLoaded", function (ev) {
+
+            const addBookButton = document.getElementById('addBookButton');
+            const clearButton = document.getElementById('clearButton');
+            const updateDetailsButton = document.getElementById('updateDetailsButton');
+
+            const bookTitleInput = document.getElementById('bookTitleInput');
+            const bookIsbnInput = document.getElementById('bookIsbnInput');
+            const bookAuthorsTextarea = document.getElementById('bookAuthorsTextarea');
+            const bookPublishersTextarea = document.getElementById('bookPublishersTextarea');
+            const bookFormatSelect = document.getElementById('bookFormatSelect');
+            const bookTagsInput = document.getElementById('bookTagsInput');
+
+            addBookButton.addEventListener('click', function (ev) {
+
+                // Validate form
+
+                let addBookRequest = {
+                    "bookTitle": bookTitleInput.value,
+                    "bookIsbn": bookIsbnInput.value,
+                    "bookAuthors": bookAuthorsTextarea.value,
+                    "bookPublishers": bookPublishersTextarea.value,
+                    "bookFormat": bookFormatSelect.value,
+                    "bookTags": bookTagsInput.value
+                };
+
+                addBook(addBookRequest);
+            });
+
+            clearButton.addEventListener('click', function (ev) {
+                bookTitleInput.value = "";
+                bookIsbnInput.value = "";
+                bookAuthorsTextarea.value = "";
+                bookPublishersTextarea.value = "";
+                bookFormatSelect.value = "Paperback";
+                bookTagsInput.valu = "";
+            });
+
+            updateDetailsButton.addEventListener('click', function (ev) {
+
+            });
+
+        });
+
+    </script>
+}
