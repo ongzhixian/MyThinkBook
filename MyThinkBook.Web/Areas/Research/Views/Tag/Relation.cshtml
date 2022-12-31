@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Research";
+    Layout = "_CanvasLayout";
+}
+
+<canvas id="viewport" width="800" height="600"></canvas>
+
+<div class="links" style="position:absolute; top:0px; left:0px;">
+    <div style="margin-left:.67em; margin-top:.67em;">
+        <label style="display:inline-block;">Node</label>
+        <input type="text" placeholder="source" />
+        <input type="text" placeholder="target" />
+        <button type="button" id="updateButton">Update</button>
+    </div>
+</div>
+
+<div class="links" style="position:absolute; top:0px; right:0px;">
+    <a asp-area="Research" asp-controller="Tag" asp-action="Index" style="margin-right:.67em">Back to tags</a>
+</div>
+
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script src="/js/arbor/arbor.js"></script>
+    <script src="/js/arbor/arbor-graphics.js"></script>
+    <script src="/js/arbor/arbor-tween.js"></script>
+    <script src="/js/halfvis-renderer.js"></script>
+    <script type="text/javascript">
+        "use strict";
+        (function ($) {
+
+            $(document).ready(function () {
+                var sys = arbor.ParticleSystem(300, 300, 0.8) // create the system with sensible repulsion/stiffness/friction
+                sys.parameters({ gravity: true }) // use center-gravity to make the graph settle nicely (ymmv)
+                sys.renderer = Renderer("#viewport") // our newly created renderer will have its .init() method called shortly by sys...
+
+                $("#updateButton").live("click", function (e) {
+                    console.log("updateButton clicked");
+                });
+
+                // add some nodes to the graph and watch it go...
+                sys.addNode('f', { label: "Sample", color: "goldenrod" })
+
+                sys.addEdge('hanu', 'ac')
+                sys.addEdge('ac', 'ac1')
+                sys.addEdge('ac', 'ac2')
+                sys.addEdge('ac', 'ac3')
+                sys.addEdge('hanu', 'tac')
+                sys.addEdge('tac', 'tac1')
+                sys.addEdge('tac', 'tac2')
+                sys.addEdge('tac', 'tac3')
+                sys.addEdge('hanu', 'e')
+                sys.addEdge('hanu', 'f')
+
+                // or, equivalently:
+                //
+                // sys.graft({
+                //   nodes:{
+                //     f:{alone:true, mass:.25}
+                //   },
+                //   edges:{
+                //     a:{ b:{},
+                //         c:{},
+                //         d:{},
+                //         e:{}
+                //     }
+                //   }
+                // })
+
+            })
+
+        })(this.jQuery);
+    </script>
+}
