@@ -12,6 +12,8 @@ using NLog.Web;
 using Microsoft.AspNetCore.HttpLogging;
 using MyThinkBook.Web.HostedServices;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
@@ -416,7 +418,21 @@ void MapApplicationsSettings(ConfigurationManager configuration, IServiceCollect
         .Bind(configuration.GetSection(MongoDbOptions.SettingsConfigurationKey))
         .ValidateDataAnnotations()
         .ValidateOnStart();
+
     
+    // str.Key.EndsWith("SqliteDbContext")
+    foreach (var connectionStringConfiguration in configuration.GetSection("ConnectionStrings").AsEnumerable().Where(r => r.Key.EndsWith("SqliteDbContext")))
+    {
+        var dbContextName = connectionStringConfiguration.Key.Split(':', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+
+        services.AddOptions<SqliteDbOptions>(dbContextName)
+            .Configure(option =>
+            {
+                option.ConnectionString = connectionStringConfiguration.Value ?? throw new ArgumentNullException(connectionStringConfiguration.Key);
+            })
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+    }
 
     services.Configure<HealthCheckPublisherOptions>(options =>
     {

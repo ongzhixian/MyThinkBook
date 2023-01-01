@@ -22,7 +22,7 @@ public record BookstoreAuthor : BookAuthor
 {
     public int Id { get; set; }
 
-    public new ICollection<BookstoreBook> Books { get; set; } = default!;
+    //public new ICollection<BookstoreBook> Books { get; set; } = default!;
     
 }
 
@@ -75,7 +75,9 @@ public class BookstoreDbContext : DbContext
             e.Property(o => o.InternationalStandardBookNumber).HasColumnName("isbn");
             e.Property(o => o.Format).HasColumnName("format");
 
-            e.HasMany(m => m.Authors).WithOne().HasConstraintName("book__author_fk");
+            e.HasMany(m => m.Authors).WithOne()
+                .HasForeignKey(m => m.Id)
+                .HasConstraintName("book__author_fk");
             //e.HasMany(m => m.Publishers).WithOne().HasConstraintName("book__publisher_fk");
             //e.HasMany(m => m.Tags).WithOne().HasConstraintName("book__tag_fk");
 
@@ -91,7 +93,9 @@ public class BookstoreDbContext : DbContext
             e.Property(o => o.LastName).HasColumnName("last_name");
             e.Property(o => o.MiddleName).HasColumnName("middle_name");
 
-            e.HasMany(m => m.Books).WithOne().HasConstraintName("author__book_fk");
+            e.HasMany(m => m.Books).WithOne()
+                //.HasForeignKey(m => m.Id)
+                .HasConstraintName("author__book_fk");
 
             e.HasKey(o => o.Id).HasName("author_pk");
         });

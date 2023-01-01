@@ -50,7 +50,12 @@ public class SqliteBookRepository : IBookRepository
 
     public async Task AddAsync(Book item)
     {
-        throw new NotImplementedException();
+        var bookstoreBook = new BookstoreBook();
+        bookstoreBook.Title = item.Title;
+        bookstoreBook.InternationalStandardBookNumber = item.InternationalStandardBookNumber;
+        bookstoreBook.Format = item.Format;
+
+        await bookstoreDbContext.Books.AddAsync(bookstoreBook);
     }
 
     public async Task<IEnumerable<Book>> ListAsync()
