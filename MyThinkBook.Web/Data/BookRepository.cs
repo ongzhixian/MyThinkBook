@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using MyThinkBook.Web.Domain;
+using MyThinkBook.Domain;
 
 namespace MyThinkBook.Web.Data;
 
@@ -11,12 +11,12 @@ public interface IBookRepository
 
 }
 
-public class BookRepository : IBookRepository
+public class MongoDbBookRepository : IBookRepository
 {
-    private readonly ILogger<BookRepository> logger;
+    private readonly ILogger<MongoDbBookRepository> logger;
     private readonly IMongoCollection<Book> bookCollection;
 
-    public BookRepository(ILogger<BookRepository> logger, IBookStoreMongoDbContext mongoDbContext)
+    public MongoDbBookRepository(ILogger<MongoDbBookRepository> logger, IBookStoreMongoDbContext mongoDbContext)
     {
         this.logger = logger;
 
@@ -34,5 +34,32 @@ public class BookRepository : IBookRepository
         var bookCursor = await bookCollection.FindAsync(Builders<Book>.Filter.Empty);
         
         return await bookCursor.ToListAsync();
+    }
+}
+
+public class SqliteBookRepository : IBookRepository
+{
+    private readonly ILogger<SqliteBookRepository> logger;
+    private readonly BookstoreDbContext bookstoreDbContext;
+
+    public SqliteBookRepository(ILogger<SqliteBookRepository> logger, BookstoreDbContext bookstoreDbContext)
+    {
+        this.logger = logger;
+        this.bookstoreDbContext = bookstoreDbContext;
+    }
+
+    public async Task AddAsync(Book item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<Book>> ListAsync()
+    {
+        throw new NotImplementedException();
+
+        ////Builders<Book>.Projection.Exclude(b => b.)
+        //var bookCursor = await bookCollection.FindAsync(Builders<Book>.Filter.Empty);
+
+        //return await bookCursor.ToListAsync();
     }
 }

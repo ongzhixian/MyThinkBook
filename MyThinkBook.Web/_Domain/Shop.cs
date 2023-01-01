@@ -4,16 +4,6 @@ public record Shop
 {
     public string Name { get; set; } = string.Empty;
 
-    public List<Name> Authors { get; set; } = new List<Name>();
-
-    public string Publisher { get; set; } = string.Empty;
-
-    public DateTime? PublicationDate { get; set; } = null;
-
-    public string InternationalStandardBookNumber { get; set; } = string.Empty;
-
-    public string Format { get; set; } = string.Empty;
-
     public List<string> Tags { get; set; } = new List<string>();
 
 }

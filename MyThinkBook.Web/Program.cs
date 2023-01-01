@@ -64,7 +64,8 @@ try
     // MongoDbContext: IMongoDbContext
     builder.Services.AddSingleton<MyThinkBook.Web.Data.IMongoDbContext, MyThinkBook.Web.Data.MongoDbContext>();
     builder.Services.AddSingleton<IBookStoreMongoDbContext, BookStoreMongoDbContext>();
-    builder.Services.AddSingleton<IBookRepository, BookRepository>();
+    builder.Services.AddSingleton<IBookRepository, MongoDbBookRepository>();
+    
 
     // AddFileProviderServices
     //builder.Services.AddSingleton<IDropboxFileProvider, DropboxFileProvider>();
@@ -281,6 +282,7 @@ void AddDataRepositories(IServiceCollection services)
     services.AddScoped<IInstrumentRepository, InstrumentRepository>();
 
     services.AddScoped<IClientRepository, ClientRepository>();
+    services.AddScoped<IBookRepository, SqliteBookRepository>();
 }
 
 void AddHostedServices(IServiceCollection services)
@@ -361,6 +363,10 @@ void AddDbContexts(ConfigurationManager configuration, IServiceCollection servic
 
     services.AddDbContextPool<WmsDbContext>(options => options
         .UseSqlite(configuration.GetConnectionString("WmsDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'WmsDbContextSqlite' not found."))
+        .EnableSensitiveDataLogging());
+
+    services.AddDbContextPool<BookstoreDbContext>(options => options
+        .UseSqlite(configuration.GetConnectionString("BookstoreDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'BookstoreDbContextSqlite' not found."))
         .EnableSensitiveDataLogging());
 
     //builder.Services.AddDbContext<IdentityDataContext>(options =>

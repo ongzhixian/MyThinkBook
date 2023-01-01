@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyThinkBook.Domain;
 using MyThinkBook.Web.Data;
 using MyThinkBook.Web.Domain;
 using MyThinkBook.Web.Models;
