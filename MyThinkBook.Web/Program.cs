@@ -420,7 +420,6 @@ void MapApplicationsSettings(ConfigurationManager configuration, IServiceCollect
         .ValidateOnStart();
 
     
-    // str.Key.EndsWith("SqliteDbContext")
     foreach (var connectionStringConfiguration in configuration.GetSection("ConnectionStrings").AsEnumerable().Where(r => r.Key.EndsWith("SqliteDbContext")))
     {
         var dbContextName = connectionStringConfiguration.Key.Split(':', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
