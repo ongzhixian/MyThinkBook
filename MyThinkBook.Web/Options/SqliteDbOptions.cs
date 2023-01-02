@@ -4,7 +4,7 @@ namespace MyThinkBook.Web.Options;
 
 public class SqliteDbOptions
 {
-    public const string BookstoreDbContextSqliteConnectionStringKey = "ConnectionStrings:BookstoreSqliteDbContext";
+    //public const string BookstoreDbContextSqliteConnectionStringKey = "ConnectionStrings:BookstoreSqliteDbContext";
 
     public SqliteDbOptions()
     {

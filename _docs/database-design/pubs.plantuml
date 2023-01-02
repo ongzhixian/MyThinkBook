@@ -1,0 +1,202 @@
+@startuml
+
+' ERD diagram based on pubs database
+' * **mandatory bold attribute**    -- for PK
+' **optional bold attribute**       -- NOT NULL
+' optional attribute                -- NULL
+' +public                           -- NOT NULL (green dot)
+' -private                          -- NULL
+' #protected                        -- 
+' ~package private                  --
+' *(black dot)                      -- PK (black dot)
+
+header Database "pubs"
+
+footer ERD diagram
+
+title [pubs].[dbo]
+
+'[SECTION] Entities
+
+
+entity "[dbo].[authors]" as authors {
+    * **au_id** : dbo.id <<generated>>
+    **au_lname** : varchar(40)
+    **au_fname** : varchar(20)
+    **phone** : char(12) = 'UNKNOWN'
+    address : varchar(40)
+    city : varchar(20)
+    state : char(2)
+    zip : char(5)
+    **contract** : bit
+    -- foreign keys --
+}
+
+
+entity "[dbo].[titles]" as titles {
+    * **title_id** : dbo.tid
+    **title** :  varchar(80)
+    **type** : char(12) = 'UNDECIDED'
+    pub_id : char (4)
+    price : money
+    advance : money
+    royalty : int
+    ytd_sales : int
+    notes : varchar(200)
+    **pubdate** : datetime = getdate()
+    -- dbo.publishers --
+    +pub_id : pub_id <<FK:dbo.publishers>>
+}
+
+
+entity "[dbo].[discounts]" as discounts {
+    **discounttype** : varchar(40)
+    stor_id : char(4)
+    lowqty : smallint
+    highqty : smallint
+    **discount** : decimal(4, 2)
+    -- dbo.stores --
+    +stor_id : stor_id <<FK:dbo.stores>>
+}
+
+
+entity "[dbo].[employee]" as employee {
+    **emp_id** : dbo.empid <<PK:NONCLUSTERED (emp_id ASC)>>
+    **fname** : varchar(20)
+    minit : char(1)
+    **lname** : varchar(30)
+    **job_id** : smallint = 1
+    job_lvl : tinyint = 10
+    **pub_id** : char(4) = '9952'
+    **hire_date** : datetime = getdate()
+    'CONSTRAINT PK_emp_id PRIMARY KEY NONCLUSTERED (emp_id ASC),
+    'CONSTRAINT CK_emp_id CHECK (emp_id like 'A-ZA-ZA-Z1-90-90-90-90-9FM' OR emp_id like 'A-Z-A-Z1-90-90-90-90-9FM'),
+    -- dbo.jobs --
+    +job_id : job_id <<FK:dbo.jobs>>
+    -- dbo.stores --
+    +pub_id : pub_id <<FK:dbo.publishers>>
+}
+
+
+entity "[dbo].[jobs]" as jobs {
+    * **job_id** : smallint <<generated:IDENTITY (1, 1)>>
+    **job_desc** : varchar(50) = 'New Position - title not formalized yet'
+    **min_lvl** : tinyint
+    **max_lvl** : tinyint
+}
+
+
+entity "[dbo].[pub_info]" as pub_info {
+    **pub_id** : char(4)
+    logo : image
+    pr_info : text
+    -- dbo.publishers --
+    +pub_id : pub_id <<FK:dbo.publishers>>
+}
+
+
+entity "[dbo].[publishers]" as publishers {
+    * **pub_id** : char(4) <<PK>>
+    pub_name : varchar(40)
+    city : carchar(20)
+    state : char(2)
+    country : varchar(30) = 'USA'
+}
+
+
+entity "[dbo].[roysched]" as roysched {
+    **title_id** : dbo.tid
+    lorange : int
+    hirange : int
+    royalty : int
+    -- dbo.titles --
+    +title_id : title_id <<FK:dbo.titles>>
+}
+
+
+entity "[dbo].[sales]" as sales {
+    **stor_id** : char(4)
+    **ord_num** : varchar(20)
+    **ord_date** : datetime
+    **qty** : smallint
+    **payterms** : varchar(12)
+    **title_id** : dbo.tid
+    -- dbo.stores --
+    +stor_id : stor_id <<FK:dbo.stores>>
+    -- dbo.titles --
+    +title_id : title_id <<FK:dbo.titles>>
+}
+
+
+entity "[dbo].[stores]" as stores {
+    * **stor_id** : char(4)
+    stor_name : varchar(40)
+    stor_address : varchar(40)
+    city : varchar(20)
+    state : char(2)
+    zip : char(5)
+}
+
+
+entity "[dbo].[titleauthor]" as titleauthor {
+    **au_id** : dbo.id
+    **title_id** : dbo.tid
+    au_ord : tinyint
+    royaltyper : int
+    -- dbo.authors --
+    +au_id : au_id <<FK:dbo.authors>>
+    -- dbo.titles --
+    +title_id : title_id <<FK:dbo.titles>>
+}
+
+
+
+' entity "Entity02" as e02 {
+'     *e2_id : number <<generated>>
+'     --
+'     *e1_id : number <<FK>>
+'     other_details : text
+' }
+
+' entity "Entity03" as e03 {
+'     *e3_id : number <<generated>>
+'     --
+'     e1_id : number <<FK>>
+'     other_details : text
+' }
+
+' entity "asd" {
+'     .. Simple Getter ..
+'     + getName()
+'     + getAddress()
+'     .. Some setter ..
+'     + setName()
+'     __ private data __
+'     int age
+'     -- encrypted --
+'     String password
+' }
+
+
+'[SECTION] Relationships
+
+'e01 ||..o{ e02
+'e01 |o..o{ e03
+
+
+'[SECTION] Skinparms
+
+' Configure title appearance
+' skinparam titleBorderRoundCorner 15
+' skinparam titleBorderThickness 2
+' skinparam titleBorderColor red
+' skinparam titleBackgroundColor Aqua-CadetBlue
+
+' hide the spot
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+
+@enduml

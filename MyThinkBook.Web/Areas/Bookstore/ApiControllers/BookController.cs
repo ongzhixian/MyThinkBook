@@ -16,7 +16,7 @@ public class BookController : ControllerBase
     public BookController(ILogger<BookController> logger, IEnumerable<IBookRepository> bookRepositories)
     {
         this.logger = logger;
-        bookRepository = bookRepositories.First(r => r.GetType().Name == nameof(SqliteBookRepository));
+        bookRepository = bookRepositories.First(r => r.GetType().Name == nameof(BookSqliteRepository));
     }
 
     [HttpPost]

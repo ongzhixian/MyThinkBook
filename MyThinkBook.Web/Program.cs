@@ -284,7 +284,7 @@ void AddDataRepositories(IServiceCollection services)
     services.AddScoped<IInstrumentRepository, InstrumentRepository>();
 
     services.AddScoped<IClientRepository, ClientRepository>();
-    services.AddScoped<IBookRepository, SqliteBookRepository>();
+    services.AddScoped<IBookRepository, BookSqliteRepository>();
 }
 
 void AddHostedServices(IServiceCollection services)
@@ -356,19 +356,19 @@ void AddDbContexts(ConfigurationManager configuration, IServiceCollection servic
         options.UseSqlServer(configuration.GetConnectionString("MvcMovieContext") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
 
     services.AddDbContext<MyThinkBookDbContext>(options =>
-        options.UseSqlite(configuration.GetConnectionString("MyThinkBookDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'MyThinkBookDbContextSqlite' not found.")));
+        options.UseSqlite(configuration.GetConnectionString("MyThinkBookSqliteDbContext") ?? throw new InvalidOperationException("Connection string 'MyThinkBookSqliteDbContext' not found.")));
 
     services.AddDbContextPool<InvestmentDbContext>(options =>
         options
-        .UseSqlite(configuration.GetConnectionString("InvestmentDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'InvestmentDbContextSqlite' not found."))
+        .UseSqlite(configuration.GetConnectionString("InvestmentSqliteDbContext") ?? throw new InvalidOperationException("Connection string 'InvestmentSqliteDbContext' not found."))
         .EnableSensitiveDataLogging());
 
     services.AddDbContextPool<WmsDbContext>(options => options
-        .UseSqlite(configuration.GetConnectionString("WmsDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'WmsDbContextSqlite' not found."))
+        .UseSqlite(configuration.GetConnectionString("WmsSqliteDbContext") ?? throw new InvalidOperationException("Connection string 'WmsSqliteDbContext' not found."))
         .EnableSensitiveDataLogging());
 
     services.AddDbContextPool<BookstoreDbContext>(options => options
-        .UseSqlite(configuration.GetConnectionString("BookstoreDbContextSqlite") ?? throw new InvalidOperationException("Connection string 'BookstoreDbContextSqlite' not found."))
+        .UseSqlite(configuration.GetConnectionString("BookstoreSqliteDbContext") ?? throw new InvalidOperationException("Connection string 'BookstoreSqliteDbContext' not found."))
         .EnableSensitiveDataLogging());
 
     //builder.Services.AddDbContext<IdentityDataContext>(options =>
@@ -413,6 +413,7 @@ void MapApplicationsSettings(ConfigurationManager configuration, IServiceCollect
         .ValidateDataAnnotations()
         .ValidateOnStart();
 
+    // Todo
     services.AddOptions<MongoDbOptions>()
         .Bind(configuration.GetSection(MongoDbOptions.LocalConfigurationKey))
         .Bind(configuration.GetSection(MongoDbOptions.SettingsConfigurationKey))
