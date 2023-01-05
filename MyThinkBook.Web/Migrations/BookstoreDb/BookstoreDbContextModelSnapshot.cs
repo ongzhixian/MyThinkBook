@@ -9,7 +9,7 @@ using MyThinkBook.Web.Data;
 
 namespace MyThinkBook.Web.Migrations.BookstoreDb
 {
-    [DbContext(typeof(BookstoreDbContext))]
+    [DbContext(typeof(BookstoreSqliteDbContext))]
     partial class BookstoreDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

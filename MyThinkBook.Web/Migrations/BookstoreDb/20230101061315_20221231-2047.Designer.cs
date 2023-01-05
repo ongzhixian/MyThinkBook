@@ -10,7 +10,7 @@ using MyThinkBook.Web.Data;
 
 namespace MyThinkBook.Web.Migrations.BookstoreDb
 {
-    [DbContext(typeof(BookstoreDbContext))]
+    [DbContext(typeof(BookstoreSqliteDbContext))]
     [Migration("20230101061315_20221231-2047")]
     partial class _202212312047
     {

@@ -19,7 +19,7 @@ public class HomeControllerTests
     private readonly Mock<MyThinkBookDbContext> mockMyThinkBookDbContext = new();
     private readonly Mock<DbSet<TradeInstrument>> mockTradeInstrumentDbSet = new();
     private readonly Mock<IOandaRestApiService> mockOandaRestApiService = new();
-
+    private readonly Mock<IOandaStreamApiService> mockOandaStreamApiService = new();
     private readonly List<TradeInstrument> sampleData = new List<TradeInstrument>
     {
         new TradeInstrument
@@ -51,7 +51,7 @@ public class HomeControllerTests
     [TestMethod()]
     public void HomeControllerTest()
     {
-        var controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, It.IsAny<MyThinkBookDbContext>(), mockOandaRestApiService.Object);
+        var controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, It.IsAny<MyThinkBookDbContext>(), mockOandaRestApiService.Object, mockOandaStreamApiService.Object);
 
         Assert.IsNotNull(controller);
     }
@@ -59,7 +59,7 @@ public class HomeControllerTests
     [TestMethod()]
     public async Task IndexAsyncTestAsync()
     {
-        var controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, It.IsAny<MyThinkBookDbContext>(), mockOandaRestApiService.Object);
+        var controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, It.IsAny<MyThinkBookDbContext>(), mockOandaRestApiService.Object, mockOandaStreamApiService.Object);
 
         var result = await controller.IndexAsync();
 
@@ -70,7 +70,7 @@ public class HomeControllerTests
     [TestMethod()]
     public void ChatTest()
     {
-        var controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, It.IsAny<MyThinkBookDbContext>(), mockOandaRestApiService.Object);
+        var controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, It.IsAny<MyThinkBookDbContext>(), mockOandaRestApiService.Object, mockOandaStreamApiService.Object);
 
         var result = controller.Chat();
 
@@ -81,7 +81,7 @@ public class HomeControllerTests
     [TestMethod()]
     public void PlaceOrderTest()
     {
-        HomeController controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, It.IsAny<MyThinkBookDbContext>(), mockOandaRestApiService.Object);
+        HomeController controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, It.IsAny<MyThinkBookDbContext>(), mockOandaRestApiService.Object, mockOandaStreamApiService.Object);
 
         var result = controller.PlaceOrder();
 
@@ -92,7 +92,7 @@ public class HomeControllerTests
     [TestMethod()]
     public void TradeInstrumentTest()
     {
-        var controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, mockMyThinkBookDbContext.Object, mockOandaRestApiService.Object);
+        var controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, mockMyThinkBookDbContext.Object, mockOandaRestApiService.Object, mockOandaStreamApiService.Object);
 
         var result = controller.TradeInstrument();
 
@@ -103,7 +103,7 @@ public class HomeControllerTests
     [TestMethod()]
     public void TradeInstrumentTest_WhenPageSize()
     {
-        var controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, mockMyThinkBookDbContext.Object, mockOandaRestApiService.Object);
+        var controller = new HomeController(logger.Object, fxTradingEngineProxyService.Object, mockMyThinkBookDbContext.Object, mockOandaRestApiService.Object, mockOandaStreamApiService.Object);
 
         var result = controller.TradeInstrument(pageSize: 1);
 
