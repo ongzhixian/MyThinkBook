@@ -12,7 +12,7 @@ public class BookstoreSqliteDbContext
 
     private readonly SqliteDbOptions sqliteDbOptions;
 
-    public BookstoreSqliteDbContext(ILogger<BookstoreSqliteDbContext> logger, IOptionsSnapshot<SqliteDbOptions> namedOptions)
+    public BookstoreSqliteDbContext(ILogger<BookstoreSqliteDbContext> logger, IOptionsMonitor<SqliteDbOptions> namedOptions)
     {
         this.logger = logger;
         sqliteDbOptions = namedOptions.Get(nameof(BookstoreSqliteDbContext));

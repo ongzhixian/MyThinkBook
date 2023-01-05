@@ -88,6 +88,7 @@ try
     //{
     //    return new MiniToolsDataContext(builder.Configuration[ConfigurationKeysLoader.CloudMongoDbMiniToolsConnectionString]!);
     //});
+    builder.Services.AddSingleton<BookstoreSqliteDbContext>();
 
     AddDataRepositories(builder.Services);
 
